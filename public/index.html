@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chromium Web Workloads</title>
+  <link rel="stylesheet" href="r/main.css" />
+  <link rel="icon" href="r/favicon.png" />
+  <link rel="modulepreload" href="r/main.mjs" />
+  <link rel="preload" href="workloads.json" as="fetch" type="application/json" crossorigin="anonymous" />
+</head>
+
+<body>
+  <section>
+    <h1 id="title">
+      <img src="r/icon-chromium-96.png">
+      Chromium Web Workloads
+    </h1>
+    <div class="selection">
+      <input id="search" type="search" placeholder="search" />
+      <div id="tags"></div>
+    </div>
+  </section>
+  <section id="workloads-section">
+    <h2>Workloads</h2>
+    <ul id="workloads">
+    </ul>
+  </section>
+</body>
+
+<script type="module">
+  import { ChromiumWorkloads } from "./r/main.mjs"
+  globalThis.workloads = new ChromiumWorkloads();
+</script>
+
+</html>

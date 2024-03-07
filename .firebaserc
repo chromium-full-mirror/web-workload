@@ -1,0 +1,48 @@
+{
+  "projects": {
+    "default": "chromium-workloads"
+  },
+  "targets": {
+    "chromium-workloads": {
+      "hosting": {
+        "0": [
+          "chromium-workloads-0"
+        ],
+        "1": [
+          "chromium-workloads-1"
+        ],
+        "2": [
+          "chromium-workloads-2"
+        ],
+        "3": [
+          "chromium-workloads-3"
+        ],
+        "4": [
+          "chromium-workloads-4"
+        ],
+        "5": [
+          "chromium-workloads-5"
+        ],
+        "6": [
+          "chromium-workloads-6"
+        ],
+        "7": [
+          "chromium-workloads-7"
+        ],
+        "8": [
+          "chromium-workloads-8"
+        ],
+        "9": [
+          "chromium-workloads-9"
+        ],
+        "10": [
+          "chromium-workloads-10"
+        ],
+        "default": [
+          "chromium-workloads"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

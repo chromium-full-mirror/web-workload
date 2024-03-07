@@ -1,0 +1,282 @@
+html {
+  --width: 440px;
+  --section-padding: 1em;
+  --bg: rgb(46, 51, 55);
+  --bg-2: rgb(63, 80, 93);
+  --border-2: rgb(80, 98, 112);
+  --fg: rgb(246, 246, 246);
+  --border-3: rgb(217, 214, 207);
+  --gap: 8px;
+  --pill-padding: 0.2em 0.5em;
+}
+
+
+
+body {
+  background-color: var(--bg);
+  font-family: "Helvetica Neue", Helvetica, Verdana, sans-serif;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 15px;
+}
+
+section {
+  width: var(--width);
+  padding: var(--section-padding);
+}
+
+
+h1,
+h2 {
+  font-weight: normal;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  margin: 1em -1em;
+  background: var(--bg-2);
+  font-size: 25px;
+  animation: headerAnimation 2s ease-out;
+  text-wrap: nowrap;
+}
+
+h2 {
+  text-align: center;
+  font-size: 20px;
+  margin: -0.5em 0 calc(var(--section-padding) / 2) 0;
+  padding-bottom: 0.2em;
+  border-bottom: 2px solid var(--border-2);
+}
+
+h1,
+#search,
+.tag,
+.workload .chromium-link,
+.workload .info,
+.workloads-section,
+details dl {
+  border: 2px var(--border-2) solid;
+  border-radius: 2em;
+}
+
+h1 img {
+  height: 2em;
+  padding: 0.5em;
+  animation: headerImageAnimation 1.5s ease-out;
+}
+
+@keyframes headerAnimation {
+  0% {
+    opacity: 0.5;
+    width: 2em;
+    color: rgba(0, 0, 0, 0);
+  }
+
+  25% {
+    opacity: 1;
+    width: calc(var(--width) + 2em - 4px);
+    color: rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    color: var(--fg);
+  }
+}
+
+@keyframes headerImageAnimation {
+  0% {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+.selection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+#search {
+  width: 100%;
+  padding: 0.2em 0.5em;
+  font-size: 15px;
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+#tags {
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: var(--bg-2);
+  padding: var(--pill-padding);
+  text-wrap: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+.tag:hover {
+  background: var(--border-2);
+}
+
+.tag.selected {
+  opacity: 0.5;
+}
+
+#workloads-section,
+details dl {
+  padding: var(--section-padding);
+  width: calc(var(--width) - 2 * var(--section-padding) - 4px);
+  border-radius: 1em;
+  background-color: var(--bg-2);
+  transition: all 0.5s ease-out;
+}
+
+#workloads-section {
+  opacity: 0;
+}
+
+#workloads-section.loaded {
+  opacity: 1;
+}
+
+#workloads {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.workload {
+  width: 100%;
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+}
+
+.empty-results {
+  width: 100%;
+  text-align: center;
+}
+
+.chromium-link {
+  margin-right: auto;
+}
+
+.chromium-link::before {
+  width: 1em;
+  height: 0.8em;
+  display: inline-block;
+  margin: 0 1px 0 -2px;
+  content: "";
+  background: url(./icon-chromium-96.png) no-repeat 0 0;
+  background-size: contain;
+}
+
+.chromium-link,
+.source-link,
+.official-link,
+details {
+  display: block;
+  padding: var(--pill-padding);
+  background: var(--fg);
+  border: 2px solid var(--border-3) !important;
+  color: var(--bg);
+  transition: all 0.2s ease-out;
+}
+
+.source-link,
+.official-link,
+details {
+  border-radius: 4px;
+}
+
+
+.chromium-link:hover,
+.source-link:hover,
+.official-link:hover,
+details:hover {
+  background: var(--border-3);
+}
+
+details {
+  position: relative;
+}
+details summary {
+  cursor: help;
+}
+
+details dl {
+  z-index: 100;
+  position: absolute;
+  top: 14px;
+  right: -20px;
+  color: var(--fg);
+  filter: drop-shadow(5px 10px 20px rgba(0, 0, 0, 0.5));
+  overflow: hidden;
+}
+
+details dt::after {
+  content: ":";
+}
+
+.ben {
+  --bg: rgb(254, 240, 197);
+  --bg-2: rgb(209, 169, 83);
+  --border-2: rgb(209, 35, 0);
+  --fg: rgb(98, 59, 23);
+  --border-3: rgb(70, 36, 7);
+}
+
+.ben * {
+  font-family: "Comic Sans MS", "Comic Sans", cursive !important;
+}
+
+.ben a {
+  text-decoration: var(--bg) dotted underline !important;
+}
+
+.ben h1 {
+  border: none !important;
+  background: none;
+  font-weight: bold;
+  animation: none;
+}
+
+.ben h1 img {
+  z-index: -1;
+  height: 200px;
+  margin: -50px 0 -140px -30px;
+  animation: benimation 180s ease-out infinite;
+}
+
+@keyframes benimation {
+  99% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

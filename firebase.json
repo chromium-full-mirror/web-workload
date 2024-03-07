@@ -1,0 +1,131 @@
+{
+  "hosting": [
+    {
+      "target": "default",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "0",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "1",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "2",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "3",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "4",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "5",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "6",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "7",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "8",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "9",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    }
+  ]
+}
