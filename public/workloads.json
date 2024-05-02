@@ -6,7 +6,7 @@
             "group": "speedometer",
             "version": "3.0",
             "params": "developerMode",
-            "url": "https://browserbench.org/Speedometer3.0-preview?developerMode",
+            "url": "https://browserbench.org/Speedometer3.0",
             "source": "https://github.com/WebKit/Speedometer/tree/release/3.0",
             "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance"]
         },
