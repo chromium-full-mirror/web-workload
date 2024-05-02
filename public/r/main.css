@@ -1,5 +1,5 @@
 html {
-  --width: 440px;
+  --width: 380px;
   --section-padding: 1em;
   --bg: rgb(46, 51, 55);
   --bg-2: rgb(63, 80, 93);
@@ -37,7 +37,6 @@ h2 {
 h1 {
   display: flex;
   align-items: center;
-  margin: 1em -1em;
   background: var(--bg-2);
   font-size: 25px;
   animation: headerAnimation 2s ease-out;
@@ -57,8 +56,8 @@ h1,
 .tag,
 .workload .chromium-link,
 .workload .info,
-.workloads-section,
-details dl {
+#workloads-section,
+details div {
   border: 2px var(--border-2) solid;
   border-radius: 2em;
 }
@@ -78,7 +77,7 @@ h1 img {
 
   25% {
     opacity: 1;
-    width: calc(var(--width) + 2em - 4px);
+    width: calc(var(--width) - 4px);
     color: rgba(0, 0, 0, 0);
   }
 
@@ -144,7 +143,7 @@ li {
 }
 
 #workloads-section,
-details dl {
+details div {
   padding: var(--section-padding);
   width: calc(var(--width) - 2 * var(--section-padding) - 4px);
   border-radius: 1em;
@@ -172,7 +171,8 @@ details dl {
   width: 100%;
   display: flex;
   gap: var(--gap);
-  align-items: center;
+  align-items: start;
+  position: relative;
 }
 
 .empty-results {
@@ -182,6 +182,7 @@ details dl {
 
 .chromium-link {
   margin-right: auto;
+  text-wrap: nowrap;
 }
 
 .chromium-link::before {
@@ -195,9 +196,7 @@ details dl {
 }
 
 .chromium-link,
-.source-link,
-.official-link,
-details {
+summary {
   display: block;
   padding: var(--pill-padding);
   background: var(--fg);
@@ -206,39 +205,53 @@ details {
   transition: all 0.2s ease-out;
 }
 
-.source-link,
-.official-link,
 details {
+  position: absolute;
+  right: 0px
+}
+
+summary,
+details div {
   border-radius: 4px;
 }
 
-
 .chromium-link:hover,
-.source-link:hover,
-.official-link:hover,
-details:hover {
+summary:hover {
   background: var(--border-3);
 }
 
-details {
-  position: relative;
-}
-details summary {
+summary {
+  display: inline-block;
+  position: absolute;
+  right: 0px;
   cursor: help;
 }
 
-details dl {
-  z-index: 100;
+details div {
   position: absolute;
-  top: 14px;
-  right: -20px;
-  color: var(--fg);
-  filter: drop-shadow(5px 10px 20px rgba(0, 0, 0, 0.5));
+  top: 2.4em;
+  right: 0px;
   overflow: hidden;
+  width: calc(var(--width) - 4em - 8px);
+  z-index: 1;
+}
+
+details dl {
+  margin: 0;
 }
 
 details dt::after {
   content: ":";
+}
+
+details dd {
+  margin-bottom: 0.2em;
+}
+
+details a {
+  word-wrap: break-word;
+  color: var(--fg);
+  text-decoration: underline;
 }
 
 .ben {
@@ -251,10 +264,6 @@ details dt::after {
 
 .ben * {
   font-family: "Comic Sans MS", "Comic Sans", cursive !important;
-}
-
-.ben a {
-  text-decoration: var(--bg) dotted underline !important;
 }
 
 .ben h1 {
@@ -279,4 +288,14 @@ details dt::after {
   100% {
     transform: rotate(360deg);
   }
+}
+
+footer {
+  margin-top: 1em;
+  opacity: 0.5;
+}
+
+footer a {
+  color: var(--fg);
+  text-decoration: none;
 }

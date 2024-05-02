@@ -29,19 +29,30 @@ export class ChromiumWorkloads {
     const importMetaUrl = import.meta.url;
     const response = await fetch(`${importMetaUrl}/../../workloads.json`);
     this.data = await response.json();
-    this.workloads = this.data.workloads
-    const tmpTags = this.workloads.reduce(
-      (tags, workload) => tags.concat(workload.tags, [workload.group]),
-      []).sort()
+    this.workloads = this.data.workloads;
+    let tmpTags = [];
+    this.workloads.forEach(workload => {
+      workload.chromiumUrl = this._workloadUrl(workload);
+      tmpTags = tmpTags.concat(workload.tags, [workload.group]);
+    })
     this.allTags = new Set(tmpTags.sort());
     this._init();
     this.updateTags();
     this.updateWorkloads();
   }
 
+  _workloadUrl(workload) {
+    const params = workload?.params ?? "";
+    const url = new URL(import.meta.url);
+    const rootPath = url.pathname.split("/").slice(0, -2).join("/");
+    url.pathname = `${rootPath}/${workload.group}/v${workload.version}/`;
+    url.search = new URLSearchParams(params).toString();
+    return url.toString();
+  }
+
   _mayBen() {
     const url = new URL(window.location);
-    if (url.host == "browserben.ch") {
+    if (url.host === "browserben.ch") {
       if (url.searchParams.get("ben") === "0") return;
     } else {
       if (url.searchParams.get("ben") !== "1") return;
@@ -123,7 +134,7 @@ export class ChromiumWorkloads {
   _shouldDisplayWorkload(workload, searchTerm) {
     if (workload.title.includes(searchTerm)) return true;
     if (workload.group.includes(searchTerm)) return true;
-    if (workload.version == searchTerm) return true;
+    if (workload.version === searchTerm) return true;
     if (workload.tags.includes(searchTerm)) return true;
     return false
   }
@@ -132,21 +143,23 @@ export class ChromiumWorkloads {
     const hostingUrl = this._workloadUrl(workload)
     const node = document.createElement("li");
     node.className = "workload";
-    let innerHTML = `<a class="chromium-link" href="${hostingUrl}">${workload.title}</a>`;
-    if (workload.source) {
-      innerHTML += `<a class="source-link" href="${workload.source}">src</a>`;
-    }
-    if (workload.url) {
-      innerHTML += `<a class="official-link" href="${workload.url}">official</a>`;
-    }
-    node.innerHTML = innerHTML;
+    node.innerHTML = `<a class="chromium-link" href="${hostingUrl}">${workload.title}</a>`;
     const details = document.createElement("details");
     let attributes = [];
-    for (const [key, value] of Object.entries(workload)) {
-      if (key == "title") continue;
+    for (let [key, value] of Object.entries(workload)) {
+      if (key === "title") continue;
+      key = key.charAt(0).toUpperCase() + key.substring(1);
+      if (typeof value === "string" && value.startsWith("http")) {
+        value = `<a href='${value}'>${value}</a>`;
+      } else if (Array.isArray(value)) {
+        value = value.join(", ")
+      }
       attributes.push(`<dt>${key}</dt><dd>${value}</dd>`)
     }
-    details.innerHTML = `<summary>info</summary><dl>${attributes.join("")}</dl>`;
+    details.innerHTML = `<summary>info</summary>
+        <div>
+        <dl>${attributes.join("")}</dl>
+        </div>`;
     node.appendChild(details);
     return node;
   }
@@ -159,13 +172,8 @@ export class ChromiumWorkloads {
   searchOnKeyUp(event) {
     if (event.key !== "Enter") return;
     const workloads = this._filteredWorkloads();
-    if (workloads.length == 1)
-      window.location.href = this._workloadUrl(workloads[0])
-  }
-
-  _workloadUrl(workload) {
-    const params = workload.params ? `?${workload.params}` : "";
-    return `${import.meta.url}/../../${workload.group}/v${workload.version}${params}`
+    if (workloads.length === 1)
+      window.location.href = workloads[0].chromiumUrl;
   }
 
   tagsOnClick(event) {
@@ -201,7 +209,13 @@ export class ChromiumWorkloads {
     this.updateWorkloads();
   }
 
-  windowOnClick() {
+  windowOnClick(event) {
+    // Ignore clicking on details
+    let target = event.target;
+    do {
+      if (target.nodeName === "DETAILS") return;
+      target = target.parentNode;
+    } while (target)
     document.querySelectorAll("details[open").forEach(
       detail => detail.open = false)
   }
