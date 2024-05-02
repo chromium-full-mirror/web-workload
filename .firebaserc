@@ -38,6 +38,78 @@
         "10": [
           "chromium-workloads-10"
         ],
+        "11": [
+          "chromium-workloads-11"
+        ],
+        "12": [
+          "chromium-workloads-12"
+        ],
+        "13": [
+          "chromium-workloads-13"
+        ],
+        "14": [
+          "chromium-workloads-14"
+        ],
+        "15": [
+          "chromium-workloads-15"
+        ],
+        "16": [
+          "chromium-workloads-16"
+        ],
+        "17": [
+          "chromium-workloads-17"
+        ],
+        "18": [
+          "chromium-workloads-18"
+        ],
+        "19": [
+          "chromium-workloads-19"
+        ],
+        "20": [
+          "chromium-workloads-20"
+        ],
+        "21": [
+          "chromium-workloads-21"
+        ],
+        "22": [
+          "chromium-workloads-22"
+        ],
+        "23": [
+          "chromium-workloads-23"
+        ],
+        "24": [
+          "chromium-workloads-24"
+        ],
+        "25": [
+          "chromium-workloads-25"
+        ],
+        "26": [
+          "chromium-workloads-26"
+        ],
+        "27": [
+          "chromium-workloads-27"
+        ],
+        "28": [
+          "chromium-workloads-28"
+        ],
+        "29": [
+          "chromium-workloads-29"
+        ],
+        "30": [
+          "chromium-workloads-30"
+        ],
+        "31": [
+          "chromium-workloads-31"
+        ],
+        "32": [
+          "chromium-workloads-32"
+        ],
+        "33": [
+          "chromium-workloads-33"
+        ],
+        "34": [
+          "chromium-workloads-34"
+        ],
         "default": [
           "chromium-workloads"
         ]

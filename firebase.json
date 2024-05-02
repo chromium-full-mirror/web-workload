@@ -126,6 +126,281 @@
         "**/*.bat",
         "**/*.sh"
       ]
+    },
+    {
+      "target": "10",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "11",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "12",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "13",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "14",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "15",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "16",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "17",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "18",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "19",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "20",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "21",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "22",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "23",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "24",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "25",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "26",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "27",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "28",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "29",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "30",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "31",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "32",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "33",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
+    },
+    {
+      "target": "34",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/*.dll",
+        "**/*.exe",
+        "**/*.bat",
+        "**/*.sh"
+      ]
     }
   ]
 }
