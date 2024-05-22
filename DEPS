@@ -37,7 +37,7 @@
 git_dependencies = 'SYNC'
 
 vars = {
-  'chromium_git': 'https://chromium.googlesource.com',
+  'chromium_speedometer_git': 'https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
@@ -58,6 +58,26 @@ vars = {
   # the commit queue can handle CLs rolling Speedometer v2.0
   # and whatever else without interference from each other.
   'speedometer_2.0_revision': '732af0dfe867f8815e662ac637357e55f285dbbb',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v2.0
+  # and whatever else without interference from each other.
+  'chromium_jetstream_git': 'https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v3.0-custom
+  # and whatever else without interference from each other.
+  'jetstream_2.2_revision': '2145cedef4ca2777b792cb0059d3400ee2a6153c',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v2.1
+  # and whatever else without interference from each other.
+  'jetstream_2.1_revision': '86a447c24c5bedb04cd824948f65fead8ce62f91',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v2.1-custom
+  # and whatever else without interference from each other.
+  'jetstream_2.0_revision': '3ec5dc3e622cedf143ced6f35492d192530f340d',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v2.0
+  # and whatever else without interference from each other.
+  'jetstream_1.1_revision': '9405dd1b7abe75e373c08d09e6f7956b40537724',
 }
 
 # Only these hosts are allowed for dependencies in this DEPS file.
@@ -67,15 +87,24 @@ allowed_hosts = [
 ]
 
 deps = {
-  # Speedometer Variants
+  # Speedometer Variants:
   'src/public/speedometer/v3.0':
-    Var('chromium_git') + '/external/github.com/WebKit/Speedometer.git' + '@' + Var('speedometer_3.0_revision'),
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_3.0_revision'),
   'src/public/speedometer/v3.0-custom':
-    Var('chromium_git') + '/external/github.com/WebKit/Speedometer.git' + '@' + Var('speedometer_3.0-custom_revision'),
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_3.0-custom_revision'),
   'src/public/speedometer/v2.1':
-    Var('chromium_git') + '/external/github.com/WebKit/Speedometer.git' + '@' + Var('speedometer_2.1_revision'),
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_2.1_revision'),
   'src/public/speedometer/v2.1-custom':
-    Var('chromium_git') + '/external/github.com/WebKit/Speedometer.git' + '@' + Var('speedometer_2.1-custom_revision'),
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_2.1-custom_revision'),
   'src/public/speedometer/v2.0':
-    Var('chromium_git') + '/external/github.com/WebKit/Speedometer.git' + '@' + Var('speedometer_2.0_revision'),
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_2.0_revision'),
+  # JetStream Variants:
+  'src/public/jetstream/v2.2':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_2.2_revision'),
+  'src/public/jetstream/v2.1m':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_2.1_revision'),
+  'src/public/jetstream/v2.0':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_2.0_revision'),
+  'src/public/jetstream/v1.1':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_1.1_revision'),
 }
