@@ -36,6 +36,8 @@
 # submodules (gitlinks).
 git_dependencies = 'SYNC'
 
+use_relative_paths = True
+
 vars = {
   'chromium_speedometer_git': 'https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git',
   # Three lines of non-changing comments so that
@@ -88,23 +90,23 @@ allowed_hosts = [
 
 deps = {
   # Speedometer Variants:
-  'src/public/speedometer/v3.0':
+  'public/speedometer/v3.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_3.0_revision'),
-  'src/public/speedometer/v3.0-custom':
+  'public/speedometer/v3.0-custom':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_3.0-custom_revision'),
-  'src/public/speedometer/v2.1':
+  'public/speedometer/v2.1':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.1_revision'),
-  'src/public/speedometer/v2.1-custom':
+  'public/speedometer/v2.1-custom':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.1-custom_revision'),
-  'src/public/speedometer/v2.0':
+  'public/speedometer/v2.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.0_revision'),
   # JetStream Variants:
-  'src/public/jetstream/v2.2':
+  'public/jetstream/v2.2':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.2_revision'),
-  'src/public/jetstream/v2.1m':
+  'public/jetstream/v2.1m':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.1_revision'),
-  'src/public/jetstream/v2.0':
+  'public/jetstream/v2.0':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.0_revision'),
-  'src/public/jetstream/v1.1':
+  'public/jetstream/v1.1':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_1.1_revision'),
 }
