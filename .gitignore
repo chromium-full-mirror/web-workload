@@ -65,5 +65,8 @@ node_modules/
 # dotenv environment variables file
 .env
 
-
 .DS_Store
+
+# Ignore DEPS-rolled workloads:
+public/speedometer/v*
+public/jetstream/v*
