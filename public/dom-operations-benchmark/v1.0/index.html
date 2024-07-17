@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const startAutomatically = urlParams.has('startAutomatically');
+  // This is the benchmark itself.
+  let id = 1,templateHtml;
+  function runBenchmarkRow(perfs, parent) {
+    const idStr = `id_${id++}`;
+    let rowTplBaseline,html,tplClone,td2,names,child1,trEl3,bAttr,classList,textContent,nodeType,textData,ctrlKey,treeWalker;
+    measure(perfs, /*repeatCall*/"first", 'non-trivial', 4, 'createElement', () => {
+      rowTplBaseline = document.createElement("template");
+    });
+
+    measure(perfs, /*repeatCall*/"first", 'non-trivial', 1, 'stringInterp', () => {
+      html =
+`<tr id=${idStr} class="a b" a=1 b=2 c=3 d=4 e=5 f=6>
+  <td></td>
+  <td g=7>Some text here</td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  </tr>`;
+    });
+    templateHtml = templateHtml || html;
+
+    measure(perfs, /*repeatCall*/"first", 'non-trivial', 2, 'innerHTML', () => {
+      rowTplBaseline.innerHTML = html;
+    });
+
+    // DocumentFragment::cloneNode(true)
+    measure(perfs, /*repeatCall*/"first", 'non-trivial', 3, 'templateClone', () => {
+      tplClone = rowTplBaseline.content.cloneNode(true);
+    });
+
+    // -------- Repeated calls below - note that they all work on the same set of elements --------
+
+    ["first","repeat"].forEach(repeatCall => {
+      measure(perfs, repeatCall, 'trivial', 6, 'firstChild', () => {
+        trEl = tplClone.firstChild;
+      });
+
+      const firstTd = trEl.firstElementChild;
+      measure(perfs, repeatCall, 'trivial', 7, 'nextSibling', () => {
+        td2 = firstTd.nextSibling;
+      });
+
+      measure(perfs, repeatCall, 'trivial', 9, 'getAttributeNames', () => {
+        names = trEl.getAttributeNames();
+      });
+
+      let children;
+      measure(perfs, repeatCall, 'trivial', 8, 'children', () => {
+        children = trEl.children;
+      });
+
+      measure(perfs, repeatCall, 'trivial', 8.5, 'children[n]', () => {
+        child1 = children[1];
+      });
+
+      measure(perfs, repeatCall, 'non-trivial', 5, 'appendChild', () => {
+        parent.appendChild(tplClone);
+      });
+
+      measure(perfs, repeatCall, 'trivial', 10, 'getElementById', () => {
+        trEl3 = document.getElementById(idStr);
+      });
+
+      measure(perfs, repeatCall, 'trivial', 12, 'getAttribute', () => {
+        bAttr = trEl.getAttribute('b');
+      });
+
+      measure(perfs, repeatCall, 'trivial', 11, 'classList', () => {
+        classList = trEl3.classList;
+      });
+
+      measure(perfs, repeatCall, 'non-trivial', 13, 'setAttribute', () => {
+        trEl.setAttribute('c','3');
+      });
+
+      measure(perfs, repeatCall, 'non-trivial', 14, 'setAttribute_same_value', () => {
+        trEl.setAttribute('c','3');
+      });
+
+      const listener = () => console.log('foo');
+      measure(perfs, repeatCall, 'non-trivial', 15, 'addEventListener', () => {
+        trEl.addEventListener('click',listener);
+      });
+
+      measure(perfs, repeatCall, 'non-trivial', 16, 'textContent', () => {
+        textContent = trEl.textContent;
+      });
+
+      const secondChild = trEl.querySelector('td[g]');
+      const thirdChild = secondChild.nextElementSibling;
+      measure(perfs, repeatCall, 'non-trivial', 17, 'insertBefore', () => {
+        trEl.insertBefore(thirdChild,secondChild);
+      });
+
+      const textNode = secondChild.firstChild;
+      measure(perfs, repeatCall, 'trivial', 15, 'data', () => {
+        textData = textNode.data;
+      });
+
+      measure(perfs, repeatCall, 'trivial', 16, 'nodeType', () => {
+        nodeType = textNode.nodeType;
+      });
+
+      const mouseEvent = new MouseEvent("mouseup");
+      measure(perfs, repeatCall, 'trivial', 17, 'MouseEvent.ctrlKey', () => {
+        ctrlKey = mouseEvent.ctrlKey;
+      });
+
+      const div = thirdChild.appendChild(document.createElement('div'));
+      measure(perfs, repeatCall, 'non-trivial', 18, 'attachShadow', () => {
+        div.attachShadow({mode: 'open'});
+      });
+
+      measure(perfs, repeatCall, 'non-trivial', 19, 'createTreeWalker', () => {
+        treeWalker = document.createTreeWalker(parent, NodeFilter.SHOW_ALL);
+      });
+
+      const iframe = document.querySelector("iframe");
+      const iframeEl = iframe.contentDocument.body.firstChild;
+      measure(perfs, repeatCall, 'non-trivial', 20, 'importNode', () => {
+        const iframeElClone = document.importNode(iframeEl, true);
+      });
+
+      // Use all of the results, to ensure nothing is optimized out. Plus verify things worked as expected.
+      assert(td2.nextSibling.nextSibling.getAttribute('g') === '7' && names.length === 8 && child1 === secondChild &&
+          bAttr === '2' && classList.length === 2 && textContent.length > 0 && thirdChild.children.length === 1 &&
+          nodeType === 3 && textData.length > 10 && iframeEl.outerHTML === "<div></div>" &&
+          ctrlKey === false && 'currentNode' in treeWalker,'Broken behavior');
+
+      // Cleanup for repeat:
+      trEl.setAttribute('c','not 3');
+      trEl.insertBefore(secondChild,thirdChild);
+      thirdChild.replaceChildren();
+      while (parent.childNodes.length) {
+        tplClone.appendChild(parent.firstChild);
+      }
+    });
+  }
+</script>
+
+<div id="container">
+  <table id=target style="display:none"><tbody></tbody></table>
+  <fieldset id="controls">
+    <button id="run_baseline"></button>
+    <label>Update table while running<input type=checkbox checked id=running_update></label>
+    <div id=running_log></div>
+  </fieldset>
+  <div id=baseline_log></div>
+  <div id="notes"><br><br>
+    Some notes about the measurement methodology:
+    <ul>
+      <li>The benchmark repeats a series of operations on a small template, and appends that template to a table. It repeats this <span id="nruns"></span> times.</li>
+      <li>Each operation is measured using <code>Performance.now()</code>. The resolution of this timer varies by COOP policy and by browser. When the site is cross origin isolated, the resolution is 5us for Chromium, 20us for WebKit, and 100us for Gecko. When non-isolated, these numbers are 100us for Chromium and 1000us for WebKit and Gecko.</li>
+      <li>Because each operation being measured runs on the order of ~1us, but is being measured with a lower-than-1us-resolution timer, we must rely on "dithering" to average across N measuremeents, improving the precision by 1/N.</li>
+      <li>This page is currently <span id="coop_status"></span>, and the measured quantization is <span id="quant"></span> microseconds. We have chosen a value of <span>N = </span><span id="ntot"></span>, which should give an effective timer resolution of <span id="res"></span> microseconds.</li>
+      <li>Due to differences in timer precision across browsers, this benchmark will take a different amount of total time to run on different browsers. The overall runtime of the benchmark should therefore not be used as a comparison.</li>
+      <li>Garbage collection can occur during the benchmark run, which will be additive to the time of the measurment being made at the time. It is hard to control GC timing on non-Chromium browsers (pointers appreciated if you know how!). To be fair, no attempt is made to control GC on any browser, and GC is just assumed to be a fixed added time, randomly added to all measurements. It is then ignored. Note that noise reduction methods such as median(), which otherwise might be usable to remove the periodic GC noise, cannot be used due to the resolution issue mentioned above.</li>
+      <li>Each measurement is marked "trivial" or "non-trivial". That is just a guess at the implementation complexity in C++ for the actual operation, and is nothing more than a guess, especially across browsers. A "trivial" operation is something like `firstChild` which should be just a pointer lookup. A "non-trivial" operation is something like `innerHTML()` which needs to run the parser.</li>
+      <li>Because each measurement is made using two calls to performance.now, the cost of *one* of those calls is included in each measurement. To subtract this cost, a loop is made at the beginning of the run to measure this cost, and then it is subtracted from each measurement. On this browser, that cost was measured to be <span id="perfnow"></span>us.</li>
+      <li>This benchmark is hosted at <a href="https://main--earnest-semifreddo-71f4ac.netlify.app/benchmark.html">https://main--earnest-semifreddo-71f4ac.netlify.app/benchmark.html</a></li>
+    </ul>
+  </div>
+</div>
+<iframe style="display:none" srcdoc="<div></div>"></iframe>
+
+<style>
+  fieldset {
+    display:flex;
+    flex-direction:column;
+    border:0;
+    width:fit-content;
+  }
+  table#target {
+    display: none;
+  }
+  div#container {
+    width: 600px;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  table td {
+    border:1px solid black;
+    padding: 5px;
+  }
+  button {
+    font-size: medium;
+  }
+  div#notes span {
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  const perf = performance; // For speed
+  const quant = getTimerQuantizationUs();
+  const performanceNowTimeUs = getPerformanceNowTimeUs();
+  let nRuns = 200000; // Same across browsers, to equalize GC pressure
+  // let nRuns;
+  // if (quant.timerQuantizationUs < 10) {
+  //   nRuns = 50000; // Chrome high-res
+  // } else if (quant.timerQuantizationUs < 50) {
+  //   nRuns = 200000; // WebKit/Firefox high-res
+  // } else if (quant.timerQuantizationUs < 200) {
+  //   nRuns = 100000; // Chrome low-res
+  // } else {
+  //   nRuns = 200000; // WebKit/Firefox low-res
+  // }
+
+  const runButton = document.querySelector("button#run_baseline");
+  runButton.textContent = `Run benchmark, nRuns = ${nRuns}`;
+  document.getElementById('nruns').textContent = nRuns;
+  document.getElementById('ntot').textContent = nRuns;
+  document.getElementById('coop_status').textContent = quant.isCrossOriginIsolated ? "Cross-origin isolated" : "NOT isolated - low precision timers";
+  document.getElementById('quant').textContent = quant.timerQuantizationUs.toFixed(1);
+  document.getElementById('res').textContent = (quant.timerQuantizationUs / nRuns).toFixed(6);
+  document.getElementById('perfnow').textContent = performanceNowTimeUs.toFixed(5);
+
+  function getTimerQuantizationUs() {
+    let timerQuantizationUs = Infinity;
+    let endTime;
+    for(let i=0;i<100;++i) {
+      const startTime = perf.now();
+      while ((endTime = perf.now()) === startTime)
+        ;
+      timerQuantizationUs = Math.min(timerQuantizationUs,1000*(endTime - startTime));
+    }
+    const isCrossOriginIsolated = self.crossOriginIsolated;
+    return {timerQuantizationUs,isCrossOriginIsolated};
+  }
+  function getPerformanceNowTimeUs() {
+    const n = 2000000;
+    let total = 0;
+    const startTime = perf.now();
+    for(let i=0;i<n;++i) {
+      total += perf.now()>0 ? 1 : 0;
+    }
+    const endTime = perf.now();
+    // Try to avoid optimizing out the performance.now() inside the loop:
+    document.getElementById('perfnow').textContent = total;
+    // n+1 because there's one additional call time to time the loop.
+    return 1000 * (endTime - startTime) / (n+1);
+  }
+
+  function measure(perfs,repeatCall,category,index,field, operation) {
+    if (!(field in perfs)) {
+      perfs[field] = {};
+    }
+    if (!(repeatCall in perfs[field])) {
+      perfs[field][repeatCall] = {sum:0, count:0, index, category};
+    }
+    const startTime = perf.now();
+    operation();
+    const endTime = perf.now();
+    perfs[field][repeatCall].sum += endTime - startTime;
+    perfs[field][repeatCall].count++;
+
+    // Add a bit of randomness, to help dither measurements.
+    perfs[field][repeatCall].randomdata=0;
+    for(let i=0;i<Math.random()*100;++i) {
+      perfs[field][repeatCall].randomdata += Math.random()>0.5;
+    }
+  }
+
+  function assert(cond,msg) {
+    if (!cond) {
+      msg = `Unexpected condition encountered in benchmark: ${msg}`;
+      document.querySelector("#baseline_log").textContent = msg;
+      throw Error(msg);
+    }
+  }
+
+  async function render() {
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
+  async function runAndMeasureBenchmark(updateTableEveryNRuns) {
+    await render();
+    const tbodyRef = document.querySelector("tbody");
+    let perfs = {};
+    const nWarmups = 5;
+
+    for (let i = -nWarmups; i < nRuns; i++) {
+      if (!i) {
+        perfs = {};
+      }
+
+      runBenchmarkRow(perfs, tbodyRef);
+
+      if (updateTableEveryNRuns && i >= 0 && (i % updateTableEveryNRuns === 0)) {
+        updateStatsTable(perfs);
+        await render();
+      }
+    }
+
+    return perfs;
+  }
+
+  function updateStatsTable(perfs) {
+    // Convert to average times, plus double check for bad names and indices.
+    let totalDataPoints;
+    Object.keys(perfs).forEach(key => {
+      ["first","repeat"].forEach(repeatCall => {
+        if (repeatCall in perfs[key]) {
+          perfs[key][repeatCall].averageTimeMs = perfs[key][repeatCall].sum / perfs[key][repeatCall].count - performanceNowTimeUs/1000;
+          if (!totalDataPoints) {
+            totalDataPoints = perfs[key][repeatCall].count;
+          } else {
+            assert(totalDataPoints == perfs[key][repeatCall].count,`Duplicate name for ${key}`);
+          }
+        }
+      });
+    });
+
+    let report = '<table><thead><tr><th>Type</th><th>Benchmark</th><th>Time (us/call)</th></tr></thead>';
+    let outputData = {};
+    Object.keys(perfs)
+      .sort((a, b) => {
+        return -perfs[a].first.category.localeCompare(perfs[b].first.category) ||
+            perfs[a].first.index - perfs[b].first.index;
+      })
+      .forEach(key => {
+      ["first","repeat"].forEach(repeatCall => {
+        if (repeatCall in perfs[key]) {
+          const category = perfs[key][repeatCall].category;
+          const benchmarkName = `${key}${repeatCall !== "first" ? " (repeat)" : ""}`;
+          const time_usec = 1000*perfs[key][repeatCall].averageTimeMs;
+          report += `<tr>
+            <td>${category}</td>
+            <td>${benchmarkName}</td>
+            <td>${time_usec.toFixed(3)}</td>
+          </tr>`;
+          outputData[benchmarkName] = time_usec;
+        }
+      });
+    });
+    window.results = outputData;
+    report += `</table><br><br>template:<br>`;
+    const log = document.querySelector("#baseline_log");
+    log.innerHTML = report;
+    const pre = document.createElement('pre');
+    pre.innerText = templateHtml;
+    log.appendChild(pre);
+    // Update text status
+    document.getElementById('running_log').textContent = `Running, ${(100*totalDataPoints/nRuns).toFixed(0)}%...`;
+  }
+
+  async function runBenchmark() {
+    controls.disabled = true;
+    const continuousUpdate = document.getElementById('running_update').checked;
+    const updateTableEveryNRuns = continuousUpdate ? (Math.max(1,Math.floor(nRuns/50))) : undefined;
+    const startTime = perf.now();
+    const perfs = await runAndMeasureBenchmark(updateTableEveryNRuns);
+    const endTime = perf.now();
+    updateStatsTable(perfs);
+    controls.disabled = false;
+    document.getElementById('running_log').textContent = `Done. Total elapsed = ${((endTime-startTime)/1000).toFixed(1)} seconds.`;
+  }
+  controls.disabled = startAutomatically;
+  runButton.addEventListener("click", runBenchmark);
+  if (startAutomatically) {
+    window.addEventListener('load',() => runBenchmark());
+  }
+</script>

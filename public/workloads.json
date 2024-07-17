@@ -115,6 +115,16 @@
             "url": "https://browserbench.org/MotionMark1.0/",
             "source": "https://github.com/WebKit/MotionMark/tree/motionmark-release-1.0",
             "tags": ["press-benchmark", "js", "apple", "css", "animation", "canvas", "svg"]
+        },
+        {
+            "title": "DOM Operations Benchmark 1.0",
+            "help": "DOM API stress benchmark",
+            "group": "dom-operations-benchmark",
+            "version": "1.0",
+            "url": "https://main--earnest-semifreddo-71f4ac.netlify.app/benchmark.html",
+            "source": "https://github.com/mfreed7/dom-operations-benchmark",
+            "params": "startAutomatically",
+            "tags": ["js", "dom"]
         }
     ]
 }
