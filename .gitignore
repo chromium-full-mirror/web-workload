@@ -68,5 +68,6 @@ node_modules/
 .DS_Store
 
 # Ignore DEPS-rolled workloads:
-public/speedometer/v*
 public/jetstream/v*
+public/motionmark/v*
+public/speedometer/v*

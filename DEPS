@@ -40,6 +40,8 @@ use_relative_paths = True
 
 vars = {
   'chromium_speedometer_git': 'https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git',
+  'chromium_jetstream_git': 'https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git',
+  'chromium_motionmark_git': 'https://chromium.googlesource.com/external/github.com/WebKit/MotionMark.git',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
@@ -60,10 +62,7 @@ vars = {
   # the commit queue can handle CLs rolling Speedometer v2.0
   # and whatever else without interference from each other.
   'speedometer_2.0_revision': '732af0dfe867f8815e662ac637357e55f285dbbb',
-  # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling Speedometer v2.0
-  # and whatever else without interference from each other.
-  'chromium_jetstream_git': 'https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git',
+
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v3.0-custom
   # and whatever else without interference from each other.
@@ -100,6 +99,27 @@ vars = {
   # the commit queue can handle CLs rolling JetStream v2.0
   # and whatever else without interference from each other.
   'jetstream_1.1_revision': '9405dd1b7abe75e373c08d09e6f7956b40537724',
+
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v1.3.2
+  # and whatever else without interference from each other.
+  'motionmark_1.3.1_revision': 'be2a5fea89b6ef411b053ebeb95a6302b3dc0ecb',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v1.3
+  # and whatever else without interference from each other.
+  'motionmark_1.3_revision': '5d9c88136d59c11daf78d539c73e4e3e88c091ab',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v1.2
+  # and whatever else without interference from each other.
+  'motionmark_1.2_revision': '34a15d3669fc36592d9daaad9db05ebe4edb51d7',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v1.1
+  # and whatever else without interference from each other.
+  'motionmark_1.1_revision': '9259c05cb6dcdfb148d9fea6f61b0793fc5ab43d',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v1.0
+  # and whatever else without interference from each other.
+  'motionmark_1.0_revision': 'd7b0cabb02e271468edfc7b3bda86b54c74a59bf',
 }
 
 # Only these hosts are allowed for dependencies in this DEPS file.
@@ -139,4 +159,15 @@ deps = {
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.0_revision'),
   'public/jetstream/v1.1':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_1.1_revision'),
+  # MotionMark Variants:
+  'public/motionmark/v1.3.1':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_1.3.1_revision'),
+  'public/motionmark/v1.3':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_1.3_revision'),
+  'public/motionmark/v1.2':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_1.2_revision'),
+  'public/motionmark/v1.1':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_1.1_revision'),
+  'public/motionmark/v1.0':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_1.0_revision'),
 }
