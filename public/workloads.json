@@ -16,6 +16,7 @@
             "group": "speedometer",
             "version": "3.0-custom",
             "params": "developerMode",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer/+/refs/heads/3.0-custom",
             "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance", "fork"]
         },
         {
@@ -32,6 +33,7 @@
             "help": "Custom version with additional performance.mark and instrumentation helpers.",
             "group": "speedometer",
             "version": "2.1-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer/+/refs/heads/2.1-custom",
             "tags": ["press-benchmark", "dom", "js", "apple", "fork"]
         },
         {
@@ -45,6 +47,31 @@
         },
 
         {
+            "title": "JetStream 3.0-custom",
+            "help": "Custom version V8 runner additions.",
+            "group": "jetstream",
+            "version": "3.0-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v3.0-custom",
+            "tags": ["press-benchmark", "js", "apple", "fork"]
+        },
+        {
+            "title": "JetStream 3.0",
+            "help": "Official version",
+            "group": "jetstream",
+            "version": "3.0",
+            "url": "https://browserbench.org/JetStream3.0",
+            "source": "https://github.com/WebKit/WebKit/tree/main/PerformanceTests/JetStream3",
+            "tags": ["press-benchmark", "js", "apple"]
+        },
+        {
+            "title": "JetStream 2.2 Custom",
+            "help": "Custom version V8 runner additions.",
+            "group": "jetstream",
+            "version": "2.2-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v2.2-custom",
+            "tags": ["press-benchmark", "js", "apple", "fork"]
+        },
+        {
             "title": "JetStream 2.2",
             "help": "Official version",
             "group": "jetstream",
@@ -54,6 +81,14 @@
             "tags": ["press-benchmark", "js", "apple"]
         },
         {
+            "title": "JetStream 2.1 Custom",
+            "help": "Custom version V8 runner additions.",
+            "group": "jetstream",
+            "version": "2.1-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v2.1-custom",
+            "tags": ["press-benchmark", "js", "apple", "fork"]
+        },
+        {
             "title": "JetStream 2.1",
             "help": "Official version",
             "group": "jetstream",
@@ -61,6 +96,14 @@
             "url": "https://browserbench.org/JetStream2.1",
             "source": "https://github.com/WebKit/WebKit/tree/main/Websites/browserbench.org/JetStream2.1",
             "tags": ["press-benchmark", "js", "apple"]
+        },
+        {
+            "title": "JetStream 2.0 Custom",
+            "help": "Custom version with V8 runner additions.",
+            "group": "jetstream",
+            "version": "2.0-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v2.0-custom",
+            "tags": ["press-benchmark", "js", "apple", "fork"]
         },
         {
             "title": "JetStream 2.0",
@@ -80,7 +123,7 @@
             "source": "https://github.com/WebKit/WebKit/tree/main/PerformanceTests/JetStream",
             "tags": ["press-benchmark", "js", "apple"]
         },
-
+        
         {
             "title": "Motionmark 1.3",
             "help": "Official version",

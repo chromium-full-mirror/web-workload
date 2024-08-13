@@ -65,19 +65,39 @@ vars = {
   # and whatever else without interference from each other.
   'chromium_jetstream_git': 'https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling Speedometer v3.0-custom
+  # the commit queue can handle CLs rolling JetStream v3.0-custom
+  # and whatever else without interference from each other.
+  'jetstream_3.0-custom_revision': '01e3545ff597eb9082aaa984f53f5888a9d49dbb',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v3.0
+  # and whatever else without interference from each other.
+  'jetstream_3.0_revision': '8fdba5ee53d16fb93febbc8d822efe3cdf7831c2',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v2.2-custom
+  # and whatever else without interference from each other.
+  'jetstream_2.2-custom_revision': 'c8b7fa68074425acbaff1763930d9dce4324669d',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v2.2
   # and whatever else without interference from each other.
   'jetstream_2.2_revision': '2145cedef4ca2777b792cb0059d3400ee2a6153c',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling Speedometer v2.1
+  # the commit queue can handle CLs rolling JetStream v2.1-custom
+  # and whatever else without interference from each other.
+  'jetstream_2.1-custom_revision': 'eb8b92e5deb2e444b0ca67605252a7982f7cd9b2',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v2.1
   # and whatever else without interference from each other.
   'jetstream_2.1_revision': '86a447c24c5bedb04cd824948f65fead8ce62f91',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling Speedometer v2.1-custom
+  # the commit queue can handle CLs rolling JetStream v2.0-custom
+  # and whatever else without interference from each other.
+  'jetstream_2.0-custom_revision': '67130d54d8be68a6a336f421918136bd50e9a4ce',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v2.0
   # and whatever else without interference from each other.
   'jetstream_2.0_revision': '3ec5dc3e622cedf143ced6f35492d192530f340d',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling Speedometer v2.0
+  # the commit queue can handle CLs rolling JetStream v2.0
   # and whatever else without interference from each other.
   'jetstream_1.1_revision': '9405dd1b7abe75e373c08d09e6f7956b40537724',
 }
@@ -101,10 +121,20 @@ deps = {
   'public/speedometer/v2.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.0_revision'),
   # JetStream Variants:
+  'public/jetstream/v3.0-custom':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_3.0-custom_revision'),
+  'public/jetstream/v3.0':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_3.0_revision'),
+  'public/jetstream/v2.2-custom':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_2.2-custom_revision'),
   'public/jetstream/v2.2':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.2_revision'),
+  'public/jetstream/v2.1-custom':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_2.1-custom_revision'),
   'public/jetstream/v2.1':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.1_revision'),
+  'public/jetstream/v2.0-custom':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_2.0-custom_revision'),
   'public/jetstream/v2.0':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.0_revision'),
   'public/jetstream/v1.1':
