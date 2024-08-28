@@ -49,7 +49,9 @@ export class ChromiumWorkloads {
     const params = workload?.params ?? "";
     const url = new URL(import.meta.url);
     const rootPath = url.pathname.split("/").slice(0, -2).join("/");
-    url.pathname = `${rootPath}/${workload.group}/v${workload.version}/`;
+    const branchPath = workload?.branch ?? `v${workload.version}`;
+    const extraPath = workload?.path ? `${workload.path}/` : "";
+    url.pathname = `${rootPath}/${workload.group}/${branchPath}/${extraPath}`;
     url.search = new URLSearchParams(params).toString();
     return url.toString();
   }
