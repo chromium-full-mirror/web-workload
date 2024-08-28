@@ -177,6 +177,15 @@
             "source": "https://github.com/mfreed7/dom-operations-benchmark",
             "params": "startAutomatically",
             "tags": ["js", "dom"]
+        },
+        {
+            "title": "Synthetic Memory Workload",
+            "help": "Memory allocation workload",
+            "group": "web-tests",
+            "branch": "main",
+            "path": "synthetic/memory",
+            "source": "https://chromium.googlesource.com/chromium/web-tests",
+            "tags": ["js", "memory"]
         }
     ]
 }
