@@ -71,3 +71,4 @@ node_modules/
 public/jetstream/v*
 public/motionmark/v*
 public/speedometer/v*
+public/web-tests/main

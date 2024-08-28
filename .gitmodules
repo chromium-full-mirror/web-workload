@@ -55,3 +55,6 @@
 [submodule "public/motionmark/v1.0"]
 	path = public/motionmark/v1.0
 	url = https://chromium.googlesource.com/external/github.com/WebKit/MotionMark
+[submodule "public/web-tests/main"]
+	path = public/web-tests/main
+	url = https://chromium.googlesource.com/chromium/web-tests

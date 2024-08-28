@@ -42,6 +42,7 @@ vars = {
   'chromium_speedometer_git': 'https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git',
   'chromium_jetstream_git': 'https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git',
   'chromium_motionmark_git': 'https://chromium.googlesource.com/external/github.com/WebKit/MotionMark.git',
+  'chromium_web_tests_git': 'https://chromium.googlesource.com/chromium/web-tests.git',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
@@ -120,6 +121,11 @@ vars = {
   # the commit queue can handle CLs rolling Motionmark v1.0
   # and whatever else without interference from each other.
   'motionmark_1.0_revision': 'd7b0cabb02e271468edfc7b3bda86b54c74a59bf',
+
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling web-tests main
+  # and whatever else without interference from each other.
+  'web_tests_main_revision': '42cd705bb463602c867eb411f399f199f1b93f14',
 }
 
 # Only these hosts are allowed for dependencies in this DEPS file.
@@ -170,4 +176,6 @@ deps = {
     Var('chromium_motionmark_git') + '@' + Var('motionmark_1.1_revision'),
   'public/motionmark/v1.0':
     Var('chromium_motionmark_git') + '@' + Var('motionmark_1.0_revision'),
+  'public/web-tests/main':
+    Var('chromium_web_tests_git') + '@' + Var('web_tests_main_revision'),
 }
