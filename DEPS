@@ -46,6 +46,10 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
+  'speedometer_main_revision': '67bc21f1f44567a3ba41d7a3d8d0bec0e74f4a9e',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v3.0
+  # and whatever else without interference from each other.
   'speedometer_3.0_revision': '8d67f28d0281ac4330f283495b7f48286654ad7d',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0-custom
@@ -64,6 +68,10 @@ vars = {
   # and whatever else without interference from each other.
   'speedometer_2.0_revision': '732af0dfe867f8815e662ac637357e55f285dbbb',
 
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v3.0-custom
+  # and whatever else without interference from each other.
+  'jetstream_main_revision': '01e3545ff597eb9082aaa984f53f5888a9d49dbb',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v3.0-custom
   # and whatever else without interference from each other.
@@ -104,6 +112,10 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Motionmark v1.3.2
   # and whatever else without interference from each other.
+  'motionmark_main_revision': 'baf37c1fcb690abbe048e249e248e7847bddd34f',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v1.3.2
+  # and whatever else without interference from each other.
   'motionmark_1.3.1_revision': 'be2a5fea89b6ef411b053ebeb95a6302b3dc0ecb',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Motionmark v1.3
@@ -136,6 +148,8 @@ allowed_hosts = [
 
 deps = {
   # Speedometer Variants:
+  'public/speedometer/main':
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_main_revision'),
   'public/speedometer/v3.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_3.0_revision'),
   'public/speedometer/v3.0-custom':
@@ -147,6 +161,8 @@ deps = {
   'public/speedometer/v2.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.0_revision'),
   # JetStream Variants:
+  'public/jetstream/main':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_main_revision'),
   'public/jetstream/v3.0-custom':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_3.0-custom_revision'),
   'public/jetstream/v3.0':
@@ -166,6 +182,8 @@ deps = {
   'public/jetstream/v1.1':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_1.1_revision'),
   # MotionMark Variants:
+  'public/motionmark/main':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_main_revision'),
   'public/motionmark/v1.3.1':
     Var('chromium_motionmark_git') + '@' + Var('motionmark_1.3.1_revision'),
   'public/motionmark/v1.3':

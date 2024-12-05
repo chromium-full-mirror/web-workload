@@ -1,6 +1,15 @@
 {
     "workloads": [
         {
+            "title": "Speedometer Main",
+            "info": "Development version",
+            "group": "speedometer",
+            "branch": "main",
+            "params": "developerMode",
+            "source": "https://github.com/WebKit/Speedometer/tree/main",
+            "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance"]
+        },
+        {
             "title": "Speedometer 3.0",
             "info": "Official version",
             "group": "speedometer",
@@ -46,6 +55,14 @@
             "tags": ["press-benchmark", "dom", "js", "apple"]
         },
 
+        {
+            "title": "JetStream Main",
+            "help": "Development version",
+            "group": "jetstream",
+            "branch": "main",
+            "source": "https://github.com/WebKit/JetStream/tree/main",
+            "tags": ["press-benchmark", "js", "apple" ]
+        },
         {
             "title": "JetStream 3.0-custom",
             "help": "Custom version V8 runner additions.",
@@ -124,6 +141,14 @@
             "tags": ["press-benchmark", "js", "apple"]
         },
 
+        {
+            "title": "Motionmark Main",
+            "help": "Development version",
+            "group": "motionmark",
+            "branch": "main",
+            "source": "https://github.com/WebKit/MotionMark/tree/main",
+            "tags": ["press-benchmark", "js", "apple", "css", "animation", "canvas", "svg"]
+        },
         {
             "title": "Motionmark 1.3.1",
             "help": "Official version",
