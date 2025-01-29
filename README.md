@@ -28,14 +28,50 @@ LICENSEs are part of the respective workloads or workload versions.
  - JetStream versions are manually coped from the
    [webkit repository](https://github.com/WebKit/WebKit/tree/main/PerformanceTests/).
 
+## Setup ⚒️
+```
+mkdir web-workload && cd web-workload;
 
-## Deployment
+# Checkout using depot_tools's fetch command:
+fetch web-workload;
+cd web-workload
 
-[chromium-workloads](https://chromium-workloads.web.app) is hosted using
+# Setup firebase login:
+# - Install the firebase cl: https://firebase.google.com/docs/cli#install_the_firebase_cli
+# - Setup firebase:
+./setup.sh
+```
+
+## Deployment 🚀
+
+[chromium-workloads](https://chromium-workloads.web.app) is hosted on
 [firebase](https://firebase.google.com/).
 - Use [`stage-main.sh`](./stage-main.sh) to stage a testing version for the
-  main page on temporary domain
+  main page on temporary domain (can be used for testing freely)
+
+### Danger Zone 😱
 - Use [`deploy-main.sh`](./deploy-main.sh) for the main page on
   <https://chromium-workloads.web.app/>,
 - Use [`deploy-subdomains.sh`](./deploy-subdomains.sh) for the
   `chromium-workloads-${INDEX}.web.app>` subdomains.
+
+### Update and Redeployment
+- `git pull`
+- `gclient sync`
+- Testing:
+  - `./stage-main.sh`
+  - Quickly manually very that main page and benchmark versions load
+    correctly.
+  - Run the latest tracked benchmark versions.
+- Deployment:
+  - Deploy using `./deploy-main.sh`
+  - Also deploy the subdomain hosting `./deploy-subdomains.sh`
+
+### Emergency Rollback 😰
+In case of a broken deployment we can manually restore an old version via the
+[firebase console](https://firebase.corp.google.com/u/0/project/chromium-workloads/hosting/sites/chromium-workloads).
+![firebase console](help/firebase_console_restore.png)
+- Open the [firebase console](https://firebase.corp.google.com/u/0/project/chromium-workloads)
+- Open "Hosting"
+- "View" main "chromium-workloads" site
+- "Restore" one of the "Previous releases"
