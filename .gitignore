@@ -69,9 +69,9 @@ node_modules/
 
 # Ignore DEPS-rolled workloads:
 public/jetstream/v*
-public/jetstream/main
+public/jetstream/main*
 public/motionmark/v*
-public/motionmark/main
+public/motionmark/main*
 public/speedometer/v*
-public/speedometer/main
-public/web-tests/main
+public/speedometer/main*
+public/web-tests/main*

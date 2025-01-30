@@ -56,6 +56,14 @@
         },
 
         {
+            "title": "JetStream Main-custom",
+            "help": "Custom version with V8 runner additions.",
+            "group": "jetstream",
+            "branch": "main-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/main-custom",
+            "tags": ["press-benchmark", "js", "apple", "fork" ]
+        },
+        {
             "title": "JetStream Main",
             "help": "Development version",
             "group": "jetstream",
@@ -65,7 +73,7 @@
         },
         {
             "title": "JetStream 3.0-custom",
-            "help": "Custom version V8 runner additions.",
+            "help": "Custom version with V8 runner additions.",
             "group": "jetstream",
             "version": "3.0-custom",
             "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v3.0-custom",
@@ -82,7 +90,7 @@
         },
         {
             "title": "JetStream 2.2 Custom",
-            "help": "Custom version V8 runner additions.",
+            "help": "Custom version with V8 runner additions.",
             "group": "jetstream",
             "version": "2.2-custom",
             "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v2.2-custom",
@@ -99,7 +107,7 @@
         },
         {
             "title": "JetStream 2.1 Custom",
-            "help": "Custom version V8 runner additions.",
+            "help": "Custom version with V8 runner additions.",
             "group": "jetstream",
             "version": "2.1-custom",
             "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v2.1-custom",

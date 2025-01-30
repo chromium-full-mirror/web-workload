@@ -71,6 +71,10 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v3.0-custom
   # and whatever else without interference from each other.
+  'jetstream_main-custom_revision': 'd4820bdbee0417f5429478336333cfba9a0f0bab',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling JetStream v3.0-custom
+  # and whatever else without interference from each other.
   'jetstream_main_revision': 'd4820bdbee0417f5429478336333cfba9a0f0bab',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v3.0-custom
@@ -161,6 +165,8 @@ deps = {
   'public/speedometer/v2.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.0_revision'),
   # JetStream Variants:
+  'public/jetstream/main-custom':
+    Var('chromium_jetstream_git') + '@' + Var('jetstream_main-custom_revision'),
   'public/jetstream/main':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_main_revision'),
   'public/jetstream/v3.0-custom':
