@@ -116,7 +116,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Motionmark v1.3.2
   # and whatever else without interference from each other.
-  'motionmark_main_revision': 'fc28b62e19ddfc1e66a8ad5fb2fa9c65cb7f4736',
+  'motionmark_main_revision': '75efd9ebb111b6ecccbca4dc2f704159125219a1',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Motionmark v1.3.2
   # and whatever else without interference from each other.
