@@ -1,6 +1,12 @@
 [submodule "public/speedometer/main"]
 	path = public/speedometer/main
 	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
+[submodule "public/speedometer/v3.1"]
+	path = public/speedometer/v3.1
+	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
+[submodule "public/speedometer/v3.1-custom"]
+	path = public/speedometer/v3.1-custom
+	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
 [submodule "public/speedometer/v3.0"]
 	path = public/speedometer/v3.0
 	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
@@ -16,6 +22,9 @@
 [submodule "public/speedometer/v2.0"]
 	path = public/speedometer/v2.0
 	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
+[submodule "public/jetstream/main-custom"]
+	path = public/jetstream/main-custom
+	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream
 [submodule "public/jetstream/main"]
 	path = public/jetstream/main
 	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream

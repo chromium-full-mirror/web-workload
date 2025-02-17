@@ -50,6 +50,14 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
+  'speedometer_3.1_revision': 'cc9ee085ae18f05961ff3dfa1ee1a90d67b7f8ee',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v3.0-custom
+  # and whatever else without interference from each other.
+  'speedometer_3.1-custom_revision': 'e49c1bf40eac54dc9ffb432871615c9025df6a6d',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v3.0
+  # and whatever else without interference from each other.
   'speedometer_3.0_revision': '8d67f28d0281ac4330f283495b7f48286654ad7d',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0-custom
@@ -154,6 +162,10 @@ deps = {
   # Speedometer Variants:
   'public/speedometer/main':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_main_revision'),
+  'public/speedometer/v3.1':
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_3.1_revision'),
+  'public/speedometer/v3.1-custom':
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_3.1-custom_revision'),
   'public/speedometer/v3.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_3.0_revision'),
   'public/speedometer/v3.0-custom':
