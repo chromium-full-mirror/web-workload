@@ -28,12 +28,6 @@
 [submodule "public/jetstream/main"]
 	path = public/jetstream/main
 	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream
-[submodule "public/jetstream/v3.0-custom"]
-	path = public/jetstream/v3.0-custom
-	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream
-[submodule "public/jetstream/v3.0"]
-	path = public/jetstream/v3.0
-	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream
 [submodule "public/jetstream/v2.2-custom"]
 	path = public/jetstream/v2.2-custom
 	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream

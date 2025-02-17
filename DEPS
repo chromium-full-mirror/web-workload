@@ -83,15 +83,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v3.0-custom
   # and whatever else without interference from each other.
-  'jetstream_main_revision': 'e7c6e224aaef4359bd13a23125a6fb90a65ff58f',
-  # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling JetStream v3.0-custom
-  # and whatever else without interference from each other.
-  'jetstream_3.0-custom_revision': '45ae504d5c24e7b799d66ae96e5a62f925ae6ca3',
-  # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling JetStream v3.0
-  # and whatever else without interference from each other.
-  'jetstream_3.0_revision': '8fdba5ee53d16fb93febbc8d822efe3cdf7831c2',
+  'jetstream_main_revision': '4352dabb4506ca26e0841087e2e5ae675a664e46',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v2.2-custom
   # and whatever else without interference from each other.
@@ -181,10 +173,6 @@ deps = {
     Var('chromium_jetstream_git') + '@' + Var('jetstream_main-custom_revision'),
   'public/jetstream/main':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_main_revision'),
-  'public/jetstream/v3.0-custom':
-    Var('chromium_jetstream_git') + '@' + Var('jetstream_3.0-custom_revision'),
-  'public/jetstream/v3.0':
-    Var('chromium_jetstream_git') + '@' + Var('jetstream_3.0_revision'),
   'public/jetstream/v2.2-custom':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_2.2-custom_revision'),
   'public/jetstream/v2.2':
