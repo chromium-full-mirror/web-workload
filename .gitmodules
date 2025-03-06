@@ -1,6 +1,9 @@
 [submodule "public/speedometer/main"]
 	path = public/speedometer/main
 	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
+[submodule "public/speedometer/main-custom"]
+	path = public/speedometer/main-custom
+	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
 [submodule "public/speedometer/v3.1"]
 	path = public/speedometer/v3.1
 	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer

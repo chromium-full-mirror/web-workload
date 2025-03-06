@@ -44,9 +44,13 @@ vars = {
   'chromium_motionmark_git': 'https://chromium.googlesource.com/external/github.com/WebKit/MotionMark.git',
   'chromium_web_tests_git': 'https://chromium.googlesource.com/chromium/web-tests.git',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling Speedometer v3.0
+  # the commit queue can handle CLs rolling Speedometer main
   # and whatever else without interference from each other.
   'speedometer_main_revision': 'c760d160caa05792d3ed7650e85861c9f9462506',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer main-custom
+  # and whatever else without interference from each other.
+  'speedometer_main-custom_revision': 'f227c26c11e83f07c90c28c89a824f81db9d05c6',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
@@ -154,6 +158,8 @@ deps = {
   # Speedometer Variants:
   'public/speedometer/main':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_main_revision'),
+  'public/speedometer/main-custom':
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_main-custom_revision'),
   'public/speedometer/v3.1':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_3.1_revision'),
   'public/speedometer/v3.1-custom':

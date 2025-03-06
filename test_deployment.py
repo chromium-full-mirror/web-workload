@@ -162,8 +162,8 @@ SPEEDOMETER_VERSIONS = (
     ("3.0", "v3.0-custom"),
     ("3.1", "v3.1"),
     ("3.1", "v3.1-custom"),
-    # TODO(cbruni): enable main once available in crossbench.
-    #("main", "main"),
+    ("main", "main"),
+    ("main", "main-custom"),
 )
 SPEEDOMETER_STABLE_PATH = "v3.0"
 

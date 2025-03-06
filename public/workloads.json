@@ -10,6 +10,15 @@
             "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance"]
         },
         {
+            "title": "Speedometer Main Custom",
+            "help": "Custom version with additional instrumentation and workloads.",
+            "group": "speedometer",
+            "branch": "main-custom",
+            "params": "developerMode",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer/+/refs/heads/main-custom",
+            "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance", "fork"]
+        },
+        {
             "title": "Speedometer 3.1",
             "info": "Official version",
             "group": "speedometer",
