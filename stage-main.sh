@@ -6,4 +6,15 @@ cd "$DIR"
 DIR=`pwd -P`
 
 echo "Staging " $DIR;
-firebase hosting:channel:deploy --only default --expires 6h stage;
+{
+  RAW_URL_LINE=$(\
+    firebase hosting:channel:deploy --only default --expires 6h stage | \
+      tee >(grep "Channel URL") \
+    >&3);
+} 3>&1;
+
+URL=$(echo $RAW_URL_LINE | grep -oE 'https://[^ ]+');
+
+echo "";
+echo "RUNNING TESTS ON $URL";
+vpython3 ./test_deployment.py $URL;
