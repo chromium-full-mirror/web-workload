@@ -58,7 +58,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0-custom
   # and whatever else without interference from each other.
-  'speedometer_3.1-custom_revision': '115ae747164f853fdb1c88871f3b756f5e4844ce',
+  'speedometer_3.1-custom_revision': 'f40db1000aac6b03e6d2cc7936c3330875023990',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer v3.0
   # and whatever else without interference from each other.
