@@ -53,6 +53,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -79,6 +87,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -105,6 +121,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -131,6 +155,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -157,6 +189,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -183,6 +223,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -209,6 +257,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -235,6 +291,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -261,6 +325,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -287,6 +359,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -313,6 +393,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -339,6 +427,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -365,6 +461,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -391,6 +495,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -417,6 +529,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -443,6 +563,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -469,6 +597,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -495,6 +631,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -521,6 +665,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -547,6 +699,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -573,6 +733,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -599,6 +767,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -625,6 +801,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -651,6 +835,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -677,6 +869,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -703,6 +903,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -729,6 +937,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -755,6 +971,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -781,6 +1005,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -807,6 +1039,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -833,6 +1073,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -859,6 +1107,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -885,6 +1141,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -911,6 +1175,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
@@ -937,6 +1209,14 @@
             {
               "key": "Cross-Origin-Embedder-Policy",
               "value": "require-corp"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "cross-origin"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' https://chromium-workloads.web.app https://browserben.ch;"
             }
           ]
         }
