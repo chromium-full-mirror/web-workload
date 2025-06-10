@@ -234,6 +234,15 @@
             "path": "synthetic/memory",
             "source": "https://chromium.googlesource.com/chromium/web-tests",
             "tags": ["js", "memory"]
+        },
+        {
+            "title": "Powerline",
+            "help": "Battery drain workload",
+            "group": "web-tests",
+            "branch": "main",
+            "path": "powerline",
+            "source": "https://chromium.googlesource.com/chromium/web-tests",
+            "tags": ["power"]
         }
     ]
 }
