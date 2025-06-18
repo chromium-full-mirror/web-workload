@@ -240,9 +240,9 @@
             "help": "Battery drain workload",
             "group": "web-tests",
             "branch": "main",
-            "path": "powerline",
+            "path": "synthetic/powerline",
             "source": "https://chromium.googlesource.com/chromium/web-tests",
-            "tags": ["power"]
+            "tags": ["power", "audio"]
         }
     ]
 }
