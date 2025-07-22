@@ -2,12 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+async function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export class ChromiumWorkloads {
   constructor() {
     this._workloadsNode = this.$("#workloads")
     this._tagsNode = this.$("#tags");
     this._searchNode = this.$("#search");
     this._searchQuery = "";
+    this._nofBens = 0;
     this.allTags = new Set();
     this.data = {};
     this.workloads = [];
@@ -58,18 +63,31 @@ export class ChromiumWorkloads {
 
   _mayBen() {
     const url = new URL(window.location);
+    this._nofBens = Math.abs(parseInt(url.searchParams.get("ben"))) || 0;
     if (url.host === "browserben.ch") {
-      if (url.searchParams.get("ben") === "0") return;
+      if (this._nofBens == 0) this._nofBens = 1;
     } else {
-      if (url.searchParams.get("ben") !== "1") return;
+      if (this._nofBens == 0) return;
     }
-    const importMetaUrl = import.meta.url;
     this.$("body").className = "ben";
-    this.$("#title").innerHTML =
-      `Browser Ben 🇨🇭 recommends:
-        <img src="${importMetaUrl}/../ben.gif" />`;
-    url.searchParams.set("ben", "1")
+    this.$("#title").innerHTML = "Browser Ben 🇨🇭 recommends:";
+    this._addBens();
+    url.searchParams.set("ben", this._nofBens);
     window.history.pushState({}, "", url);
+  }
+
+  async _addBens() {
+    this._addBen(0);
+    for (let i = 1; i < this._nofBens; i++) {
+      await delay(500);
+      this._addBen(i);
+    }
+  }
+
+  _addBen(index) {
+    const img = document.createElement("img");
+    img.src = `${import.meta.url}/../ben.gif`;
+    this.$("#title").appendChild(img);
   }
 
   _init() {
