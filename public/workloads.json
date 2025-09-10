@@ -5,7 +5,6 @@
             "info": "Development version",
             "group": "speedometer",
             "branch": "main",
-            "params": "developerMode",
             "source": "https://github.com/WebKit/Speedometer/tree/main",
             "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance"]
         },
@@ -23,7 +22,6 @@
             "info": "Official version",
             "group": "speedometer",
             "version": "3.1",
-            "params": "developerMode",
             "url": "https://browserbench.org/Speedometer3.1",
             "source": "https://github.com/WebKit/Speedometer/tree/release/3.1",
             "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance"]
@@ -52,7 +50,6 @@
             "help": "Custom version with additional instrumentation and workloads.",
             "group": "speedometer",
             "version": "3.0-custom",
-            "params": "developerMode",
             "source": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer/+/refs/heads/3.0-custom",
             "tags": ["press-benchmark", "dom", "css", "js", "svg", "canvas", "open-governance", "fork"]
         },
@@ -82,7 +79,6 @@
             "source": "https://github.com/WebKit/WebKit/tree/main/PerformanceTests/Speedometer",
             "tags": ["press-benchmark", "dom", "js", "apple"]
         },
-
         {
             "title": "JetStream Main",
             "help": "Development version",
@@ -96,6 +92,7 @@
             "help": "Custom version with V8 runner additions.",
             "group": "jetstream",
             "branch": "main-custom",
+            "params": "developerMode",
             "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/main-custom",
             "tags": ["press-benchmark", "js", "apple", "fork" ]
         },
