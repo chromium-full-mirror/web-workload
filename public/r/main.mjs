@@ -13,6 +13,7 @@ export class ChromiumWorkloads {
     this._searchNode = this.$("#search");
     this._searchQuery = "";
     this._nofBens = 0;
+    this._isBro = false;
     this.allTags = new Set();
     this.data = {};
     this.workloads = [];
@@ -29,8 +30,9 @@ export class ChromiumWorkloads {
     const url = new URL(window.location.href);
     url.searchParams.delete("q");
     if (searchQuery) url.searchParams.set("q", searchQuery);
-    if (url.href !== window.location.href)
+    if (url.href !== window.location.href) {
       window.history.pushState({}, "", url);
+    }
   }
 
   async load() {
@@ -64,15 +66,26 @@ export class ChromiumWorkloads {
   _mayBen() {
     const url = new URL(window.location);
     this._nofBens = Math.abs(parseInt(url.searchParams.get("ben"))) || 0;
+    this._isBro = url.searchParams.has("bro");
     if (url.host === "browserben.ch") {
       if (this._nofBens == 0) this._nofBens = 1;
-    } else {
-      if (this._nofBens == 0) return;
+    } else if (url.host === "broben.ch") {
+      if (this._nofBens == 0) this._nofBens = 1;
+      this._isBro = true;
     }
+
+    if (this._nofBens == 0) return;
+
     this.$("body").className = "ben";
-    this.$("#title").innerHTML = "Browser Ben 🇨🇭 recommends:";
-    this._addBens();
     url.searchParams.set("ben", this._nofBens);
+    if (this._isBro) {
+      url.searchParams.set("bro", "");
+      this.$("#title").innerHTML = "Bro Ben 🇨🇭 recommends:";
+    } else {
+      this.$("#title").innerHTML = "Browser Ben 🇨🇭 recommends:";
+    }
+    this._addBens();
+
     window.history.pushState({}, "", url);
   }
 
@@ -86,7 +99,10 @@ export class ChromiumWorkloads {
 
   _addBen(index) {
     const img = document.createElement("img");
-    img.src = `${import.meta.url}/../ben.gif`;
+    if (this._isBro)
+      img.src = `${import.meta.url}/../broben.gif`;
+    else
+      img.src = `${import.meta.url}/../ben.gif`;
     this.$("#title").appendChild(img);
   }
 
