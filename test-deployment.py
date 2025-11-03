@@ -35,16 +35,21 @@ class TestMode(enum.StrEnum):
 def main():
   parser = argparse.ArgumentParser(
       description="Test server interaction with optional crossbench execution.")
-  parser.add_argument("url", nargs='?', help="URL for the test server")
-  parser.add_argument("--url", dest="url", help="URL for the test server")
+  url_group = parser.add_argument_group("URL")
+  url_exclusive_group = url_group.add_mutually_exclusive_group(required=True)
+  url_exclusive_group.add_argument("--url", help="URL for the test server")
+  url_exclusive_group.add_argument(
+      "url_pos", nargs='?', help="URL for the test server")
 
-  parser.add_argument(
-      "crossbench_bin",
+  crossbench_group = parser.add_argument_group("Crossbench")
+  crossbench_exclusive_group = crossbench_group.add_mutually_exclusive_group()
+  crossbench_exclusive_group.add_argument(
+      "crossbench_bin_pos",
       nargs='?',
       type=Path,
       help=f"Path to the crossbench binary",
       default=DEFAULT_CROSSBENCH_BIN)
-  parser.add_argument(
+  crossbench_exclusive_group.add_argument(
       "--crossbench",
       "--cb",
       dest="crossbench_bin",
@@ -87,6 +92,8 @@ def main():
       const=TestMode.COMPLETE)
 
   args = parser.parse_args()
+  url = args.url or args.url_pos
+  crossbench_bin = args.crossbench_bin or args.crossbench_bin_pos
 
   def fail(message):
     print(message)
@@ -94,20 +101,20 @@ def main():
     parser.print_usage()
     sys.exit(1)
 
-  if not args.crossbench_bin:
+  if not crossbench_bin:
     fail("Could not find crossbench. "
          "Please explicitly provide a path to go/crossbench.")
 
-  if not args.crossbench_bin.exists():
-    fail(f"{args.crossbench_bin} does not exist.")
+  if not crossbench_bin.exists():
+    fail(f"{crossbench_bin} does not exist.")
 
-  if not args.url:
+  if not url:
     fail("Missing stage/deployment URL")
 
-  if not is_url_reachable(args.url):
-    fail(f"URL {repr(args.url)} is not reachable.")
+  if not is_url_reachable(url):
+    fail(f"URL {repr(url)} is not reachable.")
 
-  run_tests(args.url, args.crossbench_bin, args.test_mode)
+  run_tests(url, crossbench_bin, args.test_mode)
 
 
 def is_url_reachable(url):
@@ -190,8 +197,7 @@ JETSTREAM_VERSIONS = (
     ("2.1", "v2.1-custom"),
     ("2.2", "v2.2"),
     ("2.2", "v2.2-custom"),
-    # TODO(cbruni): enable main once available in crossbench.
-    #("main", "main"),
+    ("main", "main"),
 )
 JETSTREAM_STABLE_PATH = "v2.2"
 

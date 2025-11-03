@@ -66,6 +66,7 @@ node_modules/
 .env
 
 .DS_Store
+.gemini
 
 # Ignore DEPS-rolled workloads:
 public/jetstream/v*

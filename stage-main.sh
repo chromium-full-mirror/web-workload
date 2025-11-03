@@ -17,4 +17,4 @@ URL=$(echo $RAW_URL_LINE | grep -oE 'https://[^ ]+');
 
 echo "";
 echo "RUNNING TESTS ON $URL";
-vpython3 ./test_deployment.py $URL;
+vpython3 ./test-deployment.py $URL;
