@@ -145,7 +145,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling web-tests main
   # and whatever else without interference from each other.
-  'web_tests_main_revision': '05af5717ed0e1956edff23a0c1256fb9685af184',
+  'web_tests_main_revision': '45f6d39de93560a56d485d4cf7dd3f128c8de66b',
 }
 
 # Only these hosts are allowed for dependencies in this DEPS file.
