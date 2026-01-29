@@ -97,6 +97,23 @@
             "tags": ["press-benchmark", "js", "apple", "fork" ]
         },
         {
+            "title": "JetStream 3.0 Custom",
+            "help": "Custom version with V8 runner additions.",
+            "group": "jetstream",
+            "version": "3.0-custom",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream/+/refs/heads/v3.0-custom",
+            "tags": ["press-benchmark", "js", "apple", "fork"]
+        },
+        {
+            "title": "JetStream 3.0",
+            "help": "Official version",
+            "group": "jetstream",
+            "version": "3.0",
+            "url": "https://browserbench.org/JetStream2.2",
+            "source": "https://github.com/WebKit/JetStream/tree/JetStream3.0",
+            "tags": ["press-benchmark", "js", "apple"]
+        },
+        {
             "title": "JetStream 2.2 Custom",
             "help": "Custom version with V8 runner additions.",
             "group": "jetstream",
