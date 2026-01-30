@@ -229,3 +229,11 @@ deps = {
   'public/webai-compute-benchmark/main':
     Var('chromium_webai_compute_benchmark_git') + '@' + Var('webai_compute_benchmark_main_revision'),
 }
+
+hooks = [
+  {
+    'name': 'build_workloads',
+    'pattern': '.',
+    'action': ['vpython3', 'build_workloads.py'],
+  },
+]

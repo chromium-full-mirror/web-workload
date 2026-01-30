@@ -257,6 +257,14 @@
             "path": "synthetic/powerline",
             "source": "https://chromium.googlesource.com/chromium/web-tests",
             "tags": ["power", "audio"]
+        },
+        {
+            "title": "WebAI Compute Benchmark",
+            "help": "Official version",
+            "group": "webai-compute-benchmark",
+            "branch": "main",
+            "source": "https://github.com/GoogleChrome/webai-compute-benchmark/tree/main",
+            "tags": ["webai-benchmark"]
         }
     ]
 }
