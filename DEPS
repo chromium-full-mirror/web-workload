@@ -43,6 +43,7 @@ vars = {
   'chromium_jetstream_git': 'https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git',
   'chromium_motionmark_git': 'https://chromium.googlesource.com/external/github.com/WebKit/MotionMark.git',
   'chromium_web_tests_git': 'https://chromium.googlesource.com/chromium/web-tests.git',
+  'chromium_webai_compute_benchmark_git': 'https://chromium.googlesource.com/external/github.com/GoogleChrome/webai-compute-benchmark.git',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Speedometer main
   # and whatever else without interference from each other.
@@ -146,6 +147,11 @@ vars = {
   # the commit queue can handle CLs rolling web-tests main
   # and whatever else without interference from each other.
   'web_tests_main_revision': 'b06ce7fcc3460378a8f81bf57650faa84e49a13e',
+
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling webai-compute-benchmark main
+  # and whatever else without interference from each other.
+  'webai_compute_benchmark_main_revision': '22488a497e465fc9d783a583e5c769ac21a1f752',
 }
 
 # Only these hosts are allowed for dependencies in this DEPS file.
@@ -208,4 +214,6 @@ deps = {
     Var('chromium_motionmark_git') + '@' + Var('motionmark_1.0_revision'),
   'public/web-tests/main':
     Var('chromium_web_tests_git') + '@' + Var('web_tests_main_revision'),
+  'public/webai-compute-benchmark/main':
+    Var('chromium_webai_compute_benchmark_git') + '@' + Var('webai_compute_benchmark_main_revision'),
 }

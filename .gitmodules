@@ -73,3 +73,6 @@
 [submodule "public/web-tests/main"]
 	path = public/web-tests/main
 	url = https://chromium.googlesource.com/chromium/web-tests
+[submodule "public/webai-compute-benchmark/main"]
+	path = public/webai-compute-benchmark/main
+	url = https://chromium.googlesource.com/external/github.com/GoogleChrome/webai-compute-benchmark
