@@ -232,8 +232,8 @@ deps = {
 
 hooks = [
   {
-    'name': 'build_workloads',
+    'name': 'build',
     'pattern': '.',
-    'action': ['vpython3', 'build_workloads.py'],
+    'action': ['vpython3', 'build.py'],
   },
 ]
