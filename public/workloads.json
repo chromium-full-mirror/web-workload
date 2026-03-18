@@ -259,7 +259,7 @@
             "tags": ["power", "audio"]
         },
         {
-            "title": "WebAI Compute Benchmark",
+            "title": "WebAI Compute Benchmark Main",
             "help": "Official version",
             "group": "webai-compute-benchmark",
             "branch": "main",
