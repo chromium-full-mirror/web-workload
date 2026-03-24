@@ -159,7 +159,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling webai-compute-benchmark main
   # and whatever else without interference from each other.
-  'webai_compute_benchmark_main_revision': 'a82083e2a1b2a04501266f37939165f32979be52',
+  'webai_compute_benchmark_main_revision': 'dcac76c7b6b3de6c537abcfb02032a844d8e7b97',
 }
 
 # Only these hosts are allowed for dependencies in this DEPS file.
