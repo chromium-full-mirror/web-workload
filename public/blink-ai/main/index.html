@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blink AI Benchmark</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Blink AI Benchmark</h1>
+      <div class="subtitle">window.ai.languageModel E2E Performance</div>
+
+      <div class="gauge-container">
+        <svg class="gauge-svg" width="220" height="220" viewBox="0 0 220 220">
+          <circle class="gauge-track" cx="110" cy="110" r="100"></circle>
+          <circle class="gauge-fill" id="gauge-fill" cx="110" cy="110" r="100"></circle>
+        </svg>
+
+        <button id="start-button">Start</button>
+
+        <div class="gauge-center">
+          <div class="spinner" id="status-spinner"></div>
+          <div class="gauge-value" id="gauge-value">--</div>
+          <div class="gauge-label" id="gauge-label">Ready</div>
+        </div>
+      </div>
+
+      <div class="status-text waiting" id="status-text">Click 'Start' to begin the benchmark</div>
+
+      <div class="results-panel" id="results-panel">
+        <div class="result-row">
+          <span class="result-label">Model Download</span>
+          <span class="result-value" id="res-download">--</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Session Creation</span>
+          <span class="result-value" id="res-session">--</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Time to First Token</span>
+          <span class="result-value" id="res-ttft">--</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Total Prompt Time</span>
+          <span class="result-value" id="res-total">--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

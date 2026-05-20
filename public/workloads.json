@@ -265,6 +265,14 @@
             "branch": "main",
             "source": "https://github.com/GoogleChrome/webai-compute-benchmark/tree/main",
             "tags": ["webai-benchmark"]
+        },
+        {
+            "title": "Built-in AI Benchmark",
+            "help": "Built-in AI Performance Benchmark (window.ai)",
+            "group": "blink-ai",
+            "branch": "main",
+            "source": "https://chromium.googlesource.com/web-workload/+/refs/heads/main/public/blink-ai",
+            "tags": ["ai-benchmark", "LanguageModel"]
         }
     ]
 }
