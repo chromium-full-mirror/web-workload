@@ -6,6 +6,7 @@ import shlex
 import subprocess
 import sys
 import textwrap
+import time
 import urllib.request
 import urllib.error
 
@@ -117,12 +118,16 @@ def main():
   run_tests(url, crossbench_bin, args.test_mode)
 
 
-def is_url_reachable(url):
-  try:
-    with urllib.request.urlopen(url) as response:
-      return True
-  except (urllib.error.URLError, ValueError):
-    return False
+def is_url_reachable(url, timeout_secs=5):
+  start_time = time.time()
+  while True:
+    try:
+      with urllib.request.urlopen(url) as response:
+        return True
+    except (urllib.error.URLError, ValueError):
+      if time.time() - start_time >= timeout_secs:
+        return False
+      time.sleep(0.5)
 
 
 def split_version_string(value: str):
