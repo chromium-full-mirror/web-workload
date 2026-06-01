@@ -114,7 +114,6 @@
 
     } catch (e) {
       window.testStatus = "failed";
-      window.metrics.error = e.message;
       setProgress(0);
       updateUI("failed", "Failed: " + e.message, "ERR", "Error");
       throw e;

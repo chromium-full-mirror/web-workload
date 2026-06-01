@@ -268,11 +268,11 @@
         },
         {
             "title": "Built-in AI Benchmark",
-            "help": "Built-in AI Performance Benchmark (window.ai)",
+            "help": "Built-in AI Performance Benchmark",
             "group": "blink-ai",
             "branch": "main",
             "source": "https://chromium.googlesource.com/web-workload/+/refs/heads/main/public/blink-ai",
-            "tags": ["ai-benchmark", "LanguageModel"]
+            "tags": ["ai-benchmark", "LanguageModel", "PromptAPI"]
         }
     ]
 }
