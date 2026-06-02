@@ -95,8 +95,7 @@
       }
 
       window.metrics.totalPromptTimeMs = performance.now() - promptStart;
-      const durationSec = window.metrics.totalPromptTimeMs / 1000;
-      window.metrics.chunksPerSecond = chunkCount / durationSec;
+      window.metrics.chunksPerSecond = (chunkCount-1)/(performance.now() - firstTokenTime)
 
       window.testStatus = "success";
 
