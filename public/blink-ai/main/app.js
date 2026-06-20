@@ -281,8 +281,14 @@ Honestly I have had better luck buying dish towels at the local market than shop
         throw new Error("No valid stories were executed.");
       }
 
+      // Flatten the first executed story's metrics to the root of window.metrics.
+      // This acts as a compatibility layer for the Chromium lab/Pinpoint result converter
+      // (crossbench_result_converter.py), which expects flat metric keys at the root.
+      // Doing this dynamically for the first story allows A/B testing any individual story
+      // (like audio or image) on Pinpoint while still associating the metrics with that story's name.
       const firstStoryKey = Object.keys(window.metrics)[0];
       const firstStoryMetrics = window.metrics[firstStoryKey];
+      Object.assign(window.metrics, firstStoryMetrics);
 
 
       window.testStatus = "success";
