@@ -142,6 +142,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
     let firstTokenTime;
     let chunkCount = 0;
     let timeToFirstTokenMs = 0;
+    let responseText = "";
 
     for await (const chunk of stream) {
       if (!firstTokenTime) {
@@ -149,6 +150,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
         timeToFirstTokenMs = firstTokenTime - startTime;
       }
       chunkCount++;
+      responseText += chunk;
     }
 
     const totalTimeMs = performance.now() - startTime;
@@ -160,6 +162,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
       timeToFirstTokenMs,
       totalTimeMs,
       chunksPerSecond,
+      responseText,
     };
   }
 
@@ -192,8 +195,6 @@ Honestly I have had better luck buying dish towels at the local market than shop
       const endCreate = performance.now();
       setProgress(100);
 
-
-
       storyMetrics.downloadTimeMs = downloadEnd - startCreate;
       storyMetrics.sessionCreationTimeMs = endCreate - downloadEnd;
 
@@ -204,6 +205,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
         storyMetrics.coldTimeToFirstTokenMs = coldRes.timeToFirstTokenMs;
         storyMetrics.coldTotalPromptTimeMs = coldRes.totalTimeMs;
         storyMetrics.coldChunksPerSecond = coldRes.chunksPerSecond;
+
+        console.log(`[Cold Run Output for ${story.name}]: ${coldRes.responseText}`);
       } finally {
         session.destroy();
       }
@@ -223,6 +226,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
           storyMetrics.warmChunksPerSecond.push(warmRes.chunksPerSecond);
+
+          console.log(`[Warm Run ${i + 1} Output for ${story.name}]: ${warmRes.responseText}`);
         } finally {
           warmSession.destroy();
         }
