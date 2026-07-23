@@ -29,6 +29,19 @@
               "value": "require-corp"
             }
           ]
+        },
+        {
+          "source": "/web-tests/main/analysis/web/**",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "Cross-Origin-Embedder-Policy",
+              "value": "unsafe-none"
+            }
+          ]
         }
       ]
     },
