@@ -154,7 +154,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling web-tests main
   # and whatever else without interference from each other.
-  'web_tests_main_revision': 'b06ce7fcc3460378a8f81bf57650faa84e49a13e',
+  'web_tests_main_revision': '348f9c4a2c318d7958ef1b88c041a1e1b96be164',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling webai-compute-benchmark main
