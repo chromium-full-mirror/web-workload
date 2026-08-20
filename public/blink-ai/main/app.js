@@ -1,28 +1,29 @@
 (() => {
-  const gaugeFill = document.getElementById("gauge-fill");
-  const gaugeValue = document.getElementById("gauge-value");
-  const gaugeLabel = document.getElementById("gauge-label");
-  const startBtn = document.getElementById("start-button");
-  const statusText = document.getElementById("status-text");
-  const statusSpinner = document.getElementById("status-spinner");
-  const resultsPanel = document.getElementById("results-panel");
+  const gaugeFill = document.getElementById('gauge-fill');
+  const gaugeValue = document.getElementById('gauge-value');
+  const gaugeLabel = document.getElementById('gauge-label');
+  const startBtn = document.getElementById('start-button');
+  const statusText = document.getElementById('status-text');
+  const statusSpinner = document.getElementById('status-spinner');
+  const resultsPanel = document.getElementById('results-panel');
 
-  const resDownload = document.getElementById("res-download");
-  const resSession = document.getElementById("res-session");
-  const resTtft = document.getElementById("res-ttft");
-  const resWarmTtft = document.getElementById("res-warm-ttft");
-  const resTotal = document.getElementById("res-total");
-  const resWarmTotal = document.getElementById("res-warm-total");
+  const resDownload = document.getElementById('res-download');
+  const resSession = document.getElementById('res-session');
+  const resTtft = document.getElementById('res-ttft');
+  const resWarmTtft = document.getElementById('res-warm-ttft');
+  const resTotal = document.getElementById('res-total');
+  const resWarmTotal = document.getElementById('res-warm-total');
 
-  const img1 = document.getElementById("input-image-apple");
-  const img2 = document.getElementById("input-image-orange");
-  const img3 = document.getElementById("input-image-cat");
-  const img4 = document.getElementById("input-image-strawberry");
+  const img1 = document.getElementById('input-image-apple');
+  const img2 = document.getElementById('input-image-orange');
+  const img3 = document.getElementById('input-image-cat');
+  const img4 = document.getElementById('input-image-strawberry');
 
   let cachedAudioBuffer;
   startBtn.disabled = true;
 
-  const PROMPT = `You are a Strict Analyst system. Your sole function is to execute sentiment analysis on product reviews with clinical precision. You must categorize the sentiment into exactly one of these five emoji markers: 😍 (Perfect), 🙂 (Very Good), 😐 (Good), 🙁 (Bad), or 😠 (Terrible).
+  const PROMPT =
+      `You are a Strict Analyst system. Your sole function is to execute sentiment analysis on product reviews with clinical precision. You must categorize the sentiment into exactly one of these five emoji markers: 😍 (Perfect), 🙂 (Very Good), 😐 (Good), 🙁 (Bad), or 😠 (Terrible).
 
 ADHERENCE PROTOCOL:
 1. You are strictly forbidden from providing any conversational filler, introductory text, or concluding remarks.
@@ -48,73 +49,59 @@ Honestly I have had better luck buying dish towels at the local market than shop
   const WARM_RUNS = 5;
 
   const STORIES = {
-    "language_model": {
-      name: "Language Model (Text)",
-      setup: (monitor) => {
-        return LanguageModel.create({ monitor });
+    'language_model': {
+      name: 'Language Model (Text)',
+      setup: () => {
+        return LanguageModel.create();
       },
       getPrompt: () => PROMPT
     },
-    "multimodal_image": {
-      name: "Multimodal (Image)",
-      setup: (monitor) => {
-        return LanguageModel.create({
-          expectedInputs: [{ type: "image" }],
-          monitor
-        });
+    'multimodal_image': {
+      name: 'Multimodal (Image)',
+      setup: () => {
+        return LanguageModel.create({expectedInputs: [{type: 'image'}]});
       },
-      getPrompt: () => [
-        {
-          role: "user",
-          content: [
-            { type: "text", value: "Describe the image." },
-            { type: "image", value: img1 }
-          ]
-        }
-      ]
+      getPrompt: () => [{
+        role: 'user',
+        content: [
+          {type: 'text', value: 'Describe the image.'},
+          {type: 'image', value: img1}
+        ]
+      }]
     },
-    "multimodal_images": {
-      name: "Multimodal (Multiple Images)",
-      setup: (monitor) => {
-        return LanguageModel.create({
-          expectedInputs: [{ type: "image" }],
-          monitor
-        });
+    'multimodal_images': {
+      name: 'Multimodal (Multiple Images)',
+      setup: () => {
+        return LanguageModel.create({expectedInputs: [{type: 'image'}]});
       },
-      getPrompt: () => [
-        {
-          role: "user",
-          content: [
-            { type: "text", value: "Which of these images is not like the others?" },
-            { type: "image", value: img1 },
-            { type: "image", value: img2 },
-            { type: "image", value: img3 },
-            { type: "image", value: img4 }
-          ]
-        }
-      ]
+      getPrompt: () => [{
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            value: 'Which of these images is not like the others?'
+          },
+          {type: 'image', value: img1}, {type: 'image', value: img2},
+          {type: 'image', value: img3}, {type: 'image', value: img4}
+        ]
+      }]
     },
-    "multimodal_audio": {
-      name: "Multimodal (Audio)",
-      setup: (monitor) => {
-        return LanguageModel.create({
-          expectedInputs: [{ type: "audio" }],
-          monitor
-        });
+    'multimodal_audio': {
+      name: 'Multimodal (Audio)',
+      setup: () => {
+        return LanguageModel.create({expectedInputs: [{type: 'audio'}]});
       },
       getPrompt: () => {
         if (!cachedAudioBuffer) {
-          throw new Error("Audio asset was not preloaded.");
+          throw new Error('Audio asset was not preloaded.');
         }
-        return [
-          {
-            role: "user",
-            content: [
-              { type: "text", value: "Transcribe this audio" },
-              { type: "audio", value: cachedAudioBuffer }
-            ]
-          }
-        ];
+        return [{
+          role: 'user',
+          content: [
+            {type: 'text', value: 'Transcribe this audio'},
+            {type: 'audio', value: cachedAudioBuffer}
+          ]
+        }];
       }
     }
   };
@@ -126,13 +113,13 @@ Honestly I have had better luck buying dish towels at the local market than shop
 
   function updateUI(state, message, val, label) {
     if (statusText) {
-      statusText.className = "status-text " + state;
+      statusText.className = 'status-text ' + state;
       statusText.textContent = message;
     }
     if (gaugeValue) gaugeValue.textContent = val;
     if (gaugeLabel) gaugeLabel.textContent = label;
     if (statusSpinner) {
-      statusSpinner.style.display = state === "running" ? "block" : "none";
+      statusSpinner.style.display = state === 'running' ? 'block' : 'none';
     }
   }
 
@@ -142,7 +129,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
     let firstTokenTime;
     let chunkCount = 0;
     let timeToFirstTokenMs = 0;
-    let responseText = "";
+    let responseText = '';
 
     for await (const chunk of stream) {
       if (!firstTokenTime) {
@@ -166,47 +153,37 @@ Honestly I have had better luck buying dish towels at the local market than shop
     };
   }
 
-  async function runStory(story) {
+  async function offloadModel() {
+    console.log('Sleeping 90s to allow model offloading...');
+    updateUI('running', 'Waiting for model offload (90s)...', '--', 'Waiting');
+    await new Promise(resolve => setTimeout(resolve, 90000));
+  }
 
+  async function runStory(story) {
     console.log(`Running story: ${story.name}`);
-    updateUI("running", `Initializing ${story.name}...`, "--", "Loading");
+    updateUI('running', `Initializing ${story.name}...`, '--', 'Loading');
     setProgress(0);
 
     const storyMetrics = {};
 
     try {
       const startCreate = performance.now();
-      let downloadEnd = startCreate;
-
-      const monitorFn = (m) => {
-        m.addEventListener('downloadprogress', (e) => {
-          const pct = Math.round((e.loaded / e.total) * 100);
-          setProgress(pct);
-          updateUI(
-              "running", `Downloading Model: ${pct}%`, pct + "%",
-              "Downloading");
-          if (e.loaded === e.total) {
-            downloadEnd = performance.now();
-          }
-        });
-      };
-
-      let session = await story.setup(monitorFn);
+      let session = await story.setup();
       const endCreate = performance.now();
       setProgress(100);
 
-      storyMetrics.downloadTimeMs = downloadEnd - startCreate;
-      storyMetrics.sessionCreationTimeMs = endCreate - downloadEnd;
+      storyMetrics.sessionCreationTimeMs = endCreate - startCreate;
 
       // 2. Cold Run
       try {
-        updateUI("running", "Executing cold prompt...", "--", "Running");
+        updateUI('running', 'Executing cold prompt...', '--', 'Running');
         const coldRes = await runPromptStream(session, story.getPrompt());
         storyMetrics.coldTimeToFirstTokenMs = coldRes.timeToFirstTokenMs;
         storyMetrics.coldTotalPromptTimeMs = coldRes.totalTimeMs;
         storyMetrics.coldChunksPerSecond = coldRes.chunksPerSecond;
 
-        console.log(`[Cold Run Output for ${story.name}]: ${coldRes.responseText}`);
+        console.log(
+            `[Cold Run Output for ${story.name}]: ${coldRes.responseText}`);
       } finally {
         session.destroy();
       }
@@ -218,8 +195,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
 
       for (let i = 0; i < WARM_RUNS; i++) {
         updateUI(
-            "running", `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, "--",
-            "Running");
+            'running', `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, '--',
+            'Running');
         const warmSession = await story.setup();
         try {
           const warmRes = await runPromptStream(warmSession, story.getPrompt());
@@ -227,7 +204,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
           storyMetrics.warmChunksPerSecond.push(warmRes.chunksPerSecond);
 
-          console.log(`[Warm Run ${i + 1} Output for ${story.name}]: ${warmRes.responseText}`);
+          console.log(`[Warm Run ${i + 1} Output for ${story.name}]: ${
+              warmRes.responseText}`);
         } finally {
           warmSession.destroy();
         }
@@ -243,25 +221,55 @@ Honestly I have had better luck buying dish towels at the local market than shop
 
   async function runAITest() {
     if (startBtn) startBtn.disabled = true;
-    window.testStatus = "running";
-    resultsPanel.classList.remove("visible");
+    window.testStatus = 'running';
+    resultsPanel.classList.remove('visible');
 
     try {
       if (typeof LanguageModel === 'undefined') {
         throw new Error(
-            "LanguageModel API is not available. " +
-            "Ensure experimental flags are enabled.");
+            'LanguageModel API is not available. ' +
+            'Ensure experimental flags are enabled.');
       }
 
       const availability = await LanguageModel.availability();
-      if (!["available", "downloadable", "downloading"].includes(
+      if (!['available', 'downloadable', 'downloading'].includes(
               availability)) {
-        throw new Error("Model not available (status: " + availability + ")");
+        throw new Error('Model not available (status: ' + availability + ')');
       }
 
       const urlParams = new URLSearchParams(window.location.search);
       const storiesParam = urlParams.get('stories');
-      const enabledStories = storiesParam ? storiesParam.split(',') : ['language_model'];
+      const enabledStories =
+          storiesParam ? storiesParam.split(',') : ['language_model'];
+
+      // TODO(https://crbug.com/549798622): We should rename this and the
+      // associated metrics since they also include session creation.
+      let downloadTimeMs = 0;
+
+      if (availability !== 'available') {
+        updateUI('running', 'Downloading model...', '--', 'Loading');
+        setProgress(0);
+
+        const monitor = (m) => {
+          m.addEventListener('downloadprogress', (e) => {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            setProgress(pct);
+            updateUI(
+                'running', `Downloading Model: ${pct}%`, pct + '%',
+                'Downloading');
+          });
+        };
+
+        const startCreate = performance.now();
+        const initialSession = await LanguageModel.create({monitor});
+        const endCreate = performance.now();
+        initialSession.destroy();
+
+        downloadTimeMs = endCreate - startCreate;
+        await offloadModel();
+      } else {
+        setProgress(100);
+      }
 
       window.metrics = {};
       let isFirst = true;
@@ -273,9 +281,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
           continue;
         }
         if (!isFirst) {
-          console.log("Sleeping 90s to allow model offloading...");
-          updateUI("running", "Waiting for model offload (90s)...", "--", "Waiting");
-          await new Promise(resolve => setTimeout(resolve, 90000));
+          await offloadModel();
         }
         isFirst = false;
         const storyMetrics = await runStory(story);
@@ -283,30 +289,32 @@ Honestly I have had better luck buying dish towels at the local market than shop
       }
 
       if (Object.keys(window.metrics).length === 0) {
-        throw new Error("No valid stories were executed.");
+        throw new Error('No valid stories were executed.');
       }
 
-      // Flatten the first executed story's metrics to the root of window.metrics.
-      // This acts as a compatibility layer for the Chromium lab/Pinpoint result converter
-      // (crossbench_result_converter.py), which expects flat metric keys at the root.
-      // Doing this dynamically for the first story allows A/B testing any individual story
-      // (like audio or image) on Pinpoint while still associating the metrics with that story's name.
+      // Flatten the first executed story's metrics to the root of
+      // window.metrics. This acts as a compatibility layer for the Chromium
+      // lab/Pinpoint result converter (crossbench_result_converter.py), which
+      // expects flat metric keys at the root. Doing this dynamically for the
+      // first story allows A/B testing any individual story (like audio or
+      // image) on Pinpoint while still associating the metrics with that
+      // story's name.
       const firstStoryKey = Object.keys(window.metrics)[0];
       const firstStoryMetrics = window.metrics[firstStoryKey];
       Object.assign(window.metrics, firstStoryMetrics);
+      window.metrics.downloadTimeMs = downloadTimeMs;
 
+      window.testStatus = 'success';
 
-      window.testStatus = "success";
-
-      resDownload.textContent = firstStoryMetrics.downloadTimeMs > 0 ?
-          Math.round(firstStoryMetrics.downloadTimeMs) + " ms" :
-          "Cached (0 ms)";
+      resDownload.textContent = downloadTimeMs > 0 ?
+          Math.round(downloadTimeMs) + ' ms' :
+          'Cached (0 ms)';
       resSession.textContent =
-          Math.round(firstStoryMetrics.sessionCreationTimeMs) + " ms";
+          Math.round(firstStoryMetrics.sessionCreationTimeMs) + ' ms';
       resTtft.textContent =
-          Math.round(firstStoryMetrics.coldTimeToFirstTokenMs) + " ms";
+          Math.round(firstStoryMetrics.coldTimeToFirstTokenMs) + ' ms';
       resTotal.textContent =
-          Math.round(firstStoryMetrics.coldTotalPromptTimeMs) + " ms";
+          Math.round(firstStoryMetrics.coldTotalPromptTimeMs) + ' ms';
 
       const avgWarmTtft =
           firstStoryMetrics.warmTimeToFirstTokenMs.reduce((a, b) => a + b, 0) /
@@ -314,37 +322,38 @@ Honestly I have had better luck buying dish towels at the local market than shop
       const avgWarmTotal =
           firstStoryMetrics.warmTotalPromptTimeMs.reduce((a, b) => a + b, 0) /
           WARM_RUNS;
-      resWarmTtft.textContent = Math.round(avgWarmTtft) + " ms (avg)";
-      resWarmTotal.textContent = Math.round(avgWarmTotal) + " ms (avg)";
+      resWarmTtft.textContent = Math.round(avgWarmTtft) + ' ms (avg)';
+      resWarmTotal.textContent = Math.round(avgWarmTotal) + ' ms (avg)';
 
-      resultsPanel.classList.add("visible");
+      resultsPanel.classList.add('visible');
 
       const avgWarmCps =
           firstStoryMetrics.warmChunksPerSecond.reduce((a, b) => a + b, 0) /
           WARM_RUNS;
       updateUI(
-          "success", "Benchmark Completed!", avgWarmCps.toFixed(2), "c/sec");
+          'success', 'Benchmark Completed!', avgWarmCps.toFixed(2), 'c/sec');
       return window.metrics;
 
     } catch (e) {
-      window.testStatus = "failed";
+      window.testStatus = 'failed';
       setProgress(0);
-      updateUI("failed", "Failed: " + e.message, "ERR", "Error");
+      updateUI('failed', 'Failed: ' + e.message, 'ERR', 'Error');
       throw e;
     }
   }
   window.addEventListener('load', async () => {
-    updateUI("running", "Preloading audio...", "--", "Loading");
+    updateUI('running', 'Preloading audio...', '--', 'Loading');
     try {
-      const audioEl = document.getElementById("input-audio-dream");
+      const audioEl = document.getElementById('input-audio-dream');
       const arrayBuffer = await (await fetch(audioEl.src)).arrayBuffer();
-      cachedAudioBuffer = await (new AudioContext()).decodeAudioData(arrayBuffer);
+      cachedAudioBuffer =
+          await (new AudioContext()).decodeAudioData(arrayBuffer);
     } catch (e) {
-      console.error("Failed to preload audio:", e);
+      console.error('Failed to preload audio:', e);
     }
 
-    window.testStatus = "waiting";
-    updateUI("waiting", "Ready", "--", "Ready");
+    window.testStatus = 'waiting';
+    updateUI('waiting', 'Ready', '--', 'Ready');
     startBtn.disabled = false;
     startBtn.addEventListener('click', runAITest);
   });
