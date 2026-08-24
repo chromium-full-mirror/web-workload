@@ -124,10 +124,11 @@ Honestly I have had better luck buying dish towels at the local market than shop
   }
 
   async function runPromptStream(session, promptContent) {
+    const initialUsage = session.contextUsage;
+    const inputTokens = await session.measureContextUsage(promptContent);
     const startTime = performance.now();
     const stream = session.promptStreaming(promptContent);
     let firstTokenTime;
-    let chunkCount = 0;
     let timeToFirstTokenMs = 0;
     let responseText = '';
 
@@ -136,14 +137,15 @@ Honestly I have had better luck buying dish towels at the local market than shop
         firstTokenTime = performance.now();
         timeToFirstTokenMs = firstTokenTime - startTime;
       }
-      chunkCount++;
       responseText += chunk;
     }
 
     const totalTimeMs = performance.now() - startTime;
     const durationSec = (performance.now() - firstTokenTime) / 1000;
+    const tokens = Math.max(0, session.contextUsage - initialUsage - inputTokens - 3);
+    // Exclude the first token to measure decode rate after TTFT.
     const chunksPerSecond =
-        durationSec > 0 ? (chunkCount - 1) / durationSec : 0;
+        durationSec > 0 ? Math.max(0, tokens - 1) / durationSec : 0;
 
     return {
       timeToFirstTokenMs,
