@@ -23,7 +23,7 @@
   startBtn.disabled = true;
 
   const PROMPT =
-      `You are a Strict Analyst system. Your sole function is to execute sentiment analysis on product reviews with clinical precision. You must categorize the sentiment into exactly one of these five emoji markers: 😍 (Perfect), 🙂 (Very Good), 😐 (Good), 🙁 (Bad), or 😠 (Terrible).
+    `You are a Strict Analyst system. Your sole function is to execute sentiment analysis on product reviews with clinical precision. You must categorize the sentiment into exactly one of these five emoji markers: 😍 (Perfect), 🙂 (Very Good), 😐 (Good), 🙁 (Bad), or 😠 (Terrible).
 
 ADHERENCE PROTOCOL:
 1. You are strictly forbidden from providing any conversational filler, introductory text, or concluding remarks.
@@ -59,20 +59,20 @@ Honestly I have had better luck buying dish towels at the local market than shop
     'multimodal_image': {
       name: 'Multimodal (Image)',
       setup: () => {
-        return LanguageModel.create({expectedInputs: [{type: 'image'}]});
+        return LanguageModel.create({ expectedInputs: [{ type: 'image' }] });
       },
       getPrompt: () => [{
         role: 'user',
         content: [
-          {type: 'text', value: 'Describe the image.'},
-          {type: 'image', value: img1}
+          { type: 'text', value: 'Describe the image.' },
+          { type: 'image', value: img1 }
         ]
       }]
     },
     'multimodal_images': {
       name: 'Multimodal (Multiple Images)',
       setup: () => {
-        return LanguageModel.create({expectedInputs: [{type: 'image'}]});
+        return LanguageModel.create({ expectedInputs: [{ type: 'image' }] });
       },
       getPrompt: () => [{
         role: 'user',
@@ -81,15 +81,15 @@ Honestly I have had better luck buying dish towels at the local market than shop
             type: 'text',
             value: 'Which of these images is not like the others?'
           },
-          {type: 'image', value: img1}, {type: 'image', value: img2},
-          {type: 'image', value: img3}, {type: 'image', value: img4}
+          { type: 'image', value: img1 }, { type: 'image', value: img2 },
+          { type: 'image', value: img3 }, { type: 'image', value: img4 }
         ]
       }]
     },
     'multimodal_audio': {
       name: 'Multimodal (Audio)',
       setup: () => {
-        return LanguageModel.create({expectedInputs: [{type: 'audio'}]});
+        return LanguageModel.create({ expectedInputs: [{ type: 'audio' }] });
       },
       getPrompt: () => {
         if (!cachedAudioBuffer) {
@@ -98,8 +98,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
         return [{
           role: 'user',
           content: [
-            {type: 'text', value: 'Transcribe this audio'},
-            {type: 'audio', value: cachedAudioBuffer}
+            { type: 'text', value: 'Transcribe this audio' },
+            { type: 'audio', value: cachedAudioBuffer }
           ]
         }];
       }
@@ -144,13 +144,13 @@ Honestly I have had better luck buying dish towels at the local market than shop
     const durationSec = (performance.now() - firstTokenTime) / 1000;
     const tokens = Math.max(0, session.contextUsage - initialUsage - inputTokens - 3);
     // Exclude the first token to measure decode rate after TTFT.
-    const chunksPerSecond =
-        durationSec > 0 ? Math.max(0, tokens - 1) / durationSec : 0;
+    const tokensPerSecond =
+      durationSec > 0 ? Math.max(0, tokens - 1) / durationSec : 0;
 
     return {
       timeToFirstTokenMs,
       totalTimeMs,
-      chunksPerSecond,
+      tokensPerSecond,
       responseText,
     };
   }
@@ -182,10 +182,10 @@ Honestly I have had better luck buying dish towels at the local market than shop
         const coldRes = await runPromptStream(session, story.getPrompt());
         storyMetrics.coldTimeToFirstTokenMs = coldRes.timeToFirstTokenMs;
         storyMetrics.coldTotalPromptTimeMs = coldRes.totalTimeMs;
-        storyMetrics.coldChunksPerSecond = coldRes.chunksPerSecond;
+        storyMetrics.coldTokensPerSecond = coldRes.tokensPerSecond;
 
         console.log(
-            `[Cold Run Output for ${story.name}]: ${coldRes.responseText}`);
+          `[Cold Run Output for ${story.name}]: ${coldRes.responseText}`);
       } finally {
         session.destroy();
       }
@@ -193,21 +193,20 @@ Honestly I have had better luck buying dish towels at the local market than shop
       // 3. Warm Runs
       storyMetrics.warmTimeToFirstTokenMs = [];
       storyMetrics.warmTotalPromptTimeMs = [];
-      storyMetrics.warmChunksPerSecond = [];
+      storyMetrics.warmTokensPerSecond = [];
 
       for (let i = 0; i < WARM_RUNS; i++) {
         updateUI(
-            'running', `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, '--',
-            'Running');
+          'running', `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, '--',
+          'Running');
         const warmSession = await story.setup();
         try {
           const warmRes = await runPromptStream(warmSession, story.getPrompt());
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
-          storyMetrics.warmChunksPerSecond.push(warmRes.chunksPerSecond);
+          storyMetrics.warmTokensPerSecond.push(warmRes.tokensPerSecond);
 
-          console.log(`[Warm Run ${i + 1} Output for ${story.name}]: ${
-              warmRes.responseText}`);
+          console.log(`[Warm Run ${i + 1} Output for ${story.name}]: ${warmRes.responseText}`);
         } finally {
           warmSession.destroy();
         }
@@ -229,20 +228,20 @@ Honestly I have had better luck buying dish towels at the local market than shop
     try {
       if (typeof LanguageModel === 'undefined') {
         throw new Error(
-            'LanguageModel API is not available. ' +
-            'Ensure experimental flags are enabled.');
+          'LanguageModel API is not available. ' +
+          'Ensure experimental flags are enabled.');
       }
 
       const availability = await LanguageModel.availability();
       if (!['available', 'downloadable', 'downloading'].includes(
-              availability)) {
+        availability)) {
         throw new Error('Model not available (status: ' + availability + ')');
       }
 
       const urlParams = new URLSearchParams(window.location.search);
       const storiesParam = urlParams.get('stories');
       const enabledStories =
-          storiesParam ? storiesParam.split(',') : ['language_model'];
+        storiesParam ? storiesParam.split(',') : ['language_model'];
 
       // TODO(https://crbug.com/549798622): We should rename this and the
       // associated metrics since they also include session creation.
@@ -257,13 +256,13 @@ Honestly I have had better luck buying dish towels at the local market than shop
             const pct = Math.round((e.loaded / e.total) * 100);
             setProgress(pct);
             updateUI(
-                'running', `Downloading Model: ${pct}%`, pct + '%',
-                'Downloading');
+              'running', `Downloading Model: ${pct}%`, pct + '%',
+              'Downloading');
           });
         };
 
         const startCreate = performance.now();
-        const initialSession = await LanguageModel.create({monitor});
+        const initialSession = await LanguageModel.create({ monitor });
         const endCreate = performance.now();
         initialSession.destroy();
 
@@ -309,31 +308,31 @@ Honestly I have had better luck buying dish towels at the local market than shop
       window.testStatus = 'success';
 
       resDownload.textContent = downloadTimeMs > 0 ?
-          Math.round(downloadTimeMs) + ' ms' :
-          'Cached (0 ms)';
+        Math.round(downloadTimeMs) + ' ms' :
+        'Cached (0 ms)';
       resSession.textContent =
-          Math.round(firstStoryMetrics.sessionCreationTimeMs) + ' ms';
+        Math.round(firstStoryMetrics.sessionCreationTimeMs) + ' ms';
       resTtft.textContent =
-          Math.round(firstStoryMetrics.coldTimeToFirstTokenMs) + ' ms';
+        Math.round(firstStoryMetrics.coldTimeToFirstTokenMs) + ' ms';
       resTotal.textContent =
-          Math.round(firstStoryMetrics.coldTotalPromptTimeMs) + ' ms';
+        Math.round(firstStoryMetrics.coldTotalPromptTimeMs) + ' ms';
 
       const avgWarmTtft =
-          firstStoryMetrics.warmTimeToFirstTokenMs.reduce((a, b) => a + b, 0) /
-          WARM_RUNS;
+        firstStoryMetrics.warmTimeToFirstTokenMs.reduce((a, b) => a + b, 0) /
+        WARM_RUNS;
       const avgWarmTotal =
-          firstStoryMetrics.warmTotalPromptTimeMs.reduce((a, b) => a + b, 0) /
-          WARM_RUNS;
+        firstStoryMetrics.warmTotalPromptTimeMs.reduce((a, b) => a + b, 0) /
+        WARM_RUNS;
       resWarmTtft.textContent = Math.round(avgWarmTtft) + ' ms (avg)';
       resWarmTotal.textContent = Math.round(avgWarmTotal) + ' ms (avg)';
 
       resultsPanel.classList.add('visible');
 
-      const avgWarmCps =
-          firstStoryMetrics.warmChunksPerSecond.reduce((a, b) => a + b, 0) /
-          WARM_RUNS;
+      const avgWarmTps =
+        firstStoryMetrics.warmTokensPerSecond.reduce((a, b) => a + b, 0) /
+        WARM_RUNS;
       updateUI(
-          'success', 'Benchmark Completed!', avgWarmCps.toFixed(2), 'c/sec');
+        'success', 'Benchmark Completed!', avgWarmTps.toFixed(2), 't/sec');
       return window.metrics;
 
     } catch (e) {
@@ -349,7 +348,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
       const audioEl = document.getElementById('input-audio-dream');
       const arrayBuffer = await (await fetch(audioEl.src)).arrayBuffer();
       cachedAudioBuffer =
-          await (new AudioContext()).decodeAudioData(arrayBuffer);
+        await (new AudioContext()).decodeAudioData(arrayBuffer);
     } catch (e) {
       console.error('Failed to preload audio:', e);
     }
