@@ -51,15 +51,15 @@ Honestly I have had better luck buying dish towels at the local market than shop
   const STORIES = {
     'language_model': {
       name: 'Language Model (Text)',
-      setup: () => {
-        return LanguageModel.create();
+      getCreateOptions() {
+        return {};
       },
       getPrompt: () => PROMPT
     },
     'multimodal_image': {
       name: 'Multimodal (Image)',
-      setup: () => {
-        return LanguageModel.create({ expectedInputs: [{ type: 'image' }] });
+      getCreateOptions() {
+        return { expectedInputs: [{ type: 'image' }] };
       },
       getPrompt: () => [{
         role: 'user',
@@ -71,8 +71,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
     },
     'multimodal_images': {
       name: 'Multimodal (Multiple Images)',
-      setup: () => {
-        return LanguageModel.create({ expectedInputs: [{ type: 'image' }] });
+      getCreateOptions() {
+        return { expectedInputs: [{ type: 'image' }] };
       },
       getPrompt: () => [{
         role: 'user',
@@ -88,8 +88,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
     },
     'multimodal_audio': {
       name: 'Multimodal (Audio)',
-      setup: () => {
-        return LanguageModel.create({ expectedInputs: [{ type: 'audio' }] });
+      getCreateOptions() {
+        return { expectedInputs: [{ type: 'audio' }] };
       },
       getPrompt: () => {
         if (!cachedAudioBuffer) {
@@ -170,7 +170,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
 
     try {
       const startCreate = performance.now();
-      let session = await story.setup();
+      let session = await LanguageModel.create(story.getCreateOptions());
       const endCreate = performance.now();
       setProgress(100);
 
@@ -199,7 +199,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
         updateUI(
           'running', `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, '--',
           'Running');
-        const warmSession = await story.setup();
+        const warmSession =
+            await LanguageModel.create(story.getCreateOptions());
         try {
           const warmRes = await runPromptStream(warmSession, story.getPrompt());
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
@@ -281,6 +282,16 @@ Honestly I have had better luck buying dish towels at the local market than shop
           console.warn(`Skipping invalid story key: ${storyKey}`);
           continue;
         }
+
+        const supportStatus =
+            await LanguageModel.availability(story.getCreateOptions());
+        if (supportStatus !== 'available') {
+          console.log(
+            `Model does not support capabilities for ${storyKey} ` +
+            `(status: ${supportStatus}). Skipping story.`);
+          continue;
+        }
+
         if (!isFirst) {
           await offloadModel();
         }
