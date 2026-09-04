@@ -221,6 +221,24 @@ Honestly I have had better luck buying dish towels at the local market than shop
     }
   }
 
+  function flattenResults(results) {
+    const flattened = {};
+    for (const [storyKey, storyMetrics] of Object.entries(results)) {
+      if (storyKey.includes('.')) {
+        throw new Error(
+          `storyKey "${storyKey}" cannot contain delimiter "."`);
+      }
+      for (const [metricKey, val] of Object.entries(storyMetrics)) {
+        if (metricKey.includes('.')) {
+          throw new Error(
+            `metricKey "${metricKey}" cannot contain delimiter "."`);
+        }
+        flattened[`${storyKey}.${metricKey}`] = val;
+      }
+    }
+    return flattened;
+  }
+
   async function runAITest() {
     if (startBtn) startBtn.disabled = true;
     window.testStatus = 'running';
@@ -273,7 +291,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
         setProgress(100);
       }
 
-      window.metrics = {};
+      const results = {};
       let isFirst = true;
 
       for (const storyKey of enabledStories) {
@@ -296,27 +314,20 @@ Honestly I have had better luck buying dish towels at the local market than shop
           await offloadModel();
         }
         isFirst = false;
-        const storyMetrics = await runStory(story);
-        window.metrics[storyKey] = storyMetrics;
+        results[storyKey] = await runStory(story);
       }
 
-      if (Object.keys(window.metrics).length === 0) {
+      if (Object.keys(results).length === 0) {
         throw new Error('No valid stories were executed.');
       }
 
-      // Flatten the first executed story's metrics to the root of
-      // window.metrics. This acts as a compatibility layer for the Chromium
-      // lab/Pinpoint result converter (crossbench_result_converter.py), which
-      // expects flat metric keys at the root. Doing this dynamically for the
-      // first story allows A/B testing any individual story (like audio or
-      // image) on Pinpoint while still associating the metrics with that
-      // story's name.
-      const firstStoryKey = Object.keys(window.metrics)[0];
-      const firstStoryMetrics = window.metrics[firstStoryKey];
-      Object.assign(window.metrics, firstStoryMetrics);
+      window.metrics = flattenResults(results);
       window.metrics.downloadTimeMs = downloadTimeMs;
 
       window.testStatus = 'success';
+
+      const firstStoryKey = Object.keys(results)[0];
+      const firstStoryMetrics = results[firstStoryKey];
 
       resDownload.textContent = downloadTimeMs > 0 ?
         Math.round(downloadTimeMs) + ' ms' :
