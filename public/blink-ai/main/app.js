@@ -18,7 +18,7 @@
   let cachedAudioBuffer;
   startBtn.disabled = true;
 
-  const PROMPT =
+  const EMOJI_PROMPT =
     `You are a Strict Analyst system. Your sole function is to execute sentiment analysis on product reviews with clinical precision. You must categorize the sentiment into exactly one of these five emoji markers: 😍 (Perfect), 🙂 (Very Good), 😐 (Good), 🙁 (Bad), or 😠 (Terrible).
 
 ADHERENCE PROTOCOL:
@@ -38,11 +38,36 @@ I have been shopping for my winter wardrobe since the late eighties when quality
 
 Honestly I have had better luck buying dish towels at the local market than shopping with Hargreaves & Sons because this garment is a total failyure and the sizing is way off even before it shrunk it was shaped like a box with no elegance whatsoever despite the name and I am just so tired of being let down by these fancy brands that spend more on their Instagram photos than on the actual stitching of the armpits which were also uneven by the way and now I have a headache from looking at my screen trying to find a return link that actually works but it’s just a loop of frustration and wasted money.`;
 
+  const PRODUCT_SUMMARY_PROMPT =
+    `You are a professional product analyst. Your task is to provide an objective, comprehensive summary of the product based on customer reviews. Highlight key features, pros, cons, and the overall consensus. Output in structured markdown format with sections: Overview, Pros, Cons, and Verdict.
+
+Summarize the following customer reviews for the 'ErgoFit Lumbar Office Chair':
+
+Review 1: I've been using this chair for 3 months now. The lumbar support is adjustable and really helped my lower back pain. Assembly took about 20 minutes with clear instructions. The mesh back is breathable, which is great in the summer. Only minor gripe is the armrests feel slightly plasticky, but for this price point, it's hard to beat.
+
+Review 2: Decent chair overall. Pros: very comfortable seat cushion (high density foam doesn't flatten), smooth roller wheels that don't scratch my hardwood floor, tilt lock works reliably. Cons: headrest doesn't tilt forward enough for shorter individuals (I'm 5'4"), and the packaging was banged up on arrival.
+
+Review 3: Replaced my old gamer chair with the ErgoFit and my posture has improved dramatically. The pneumatic cylinder holds height without slipping. Breathable mesh keeps you cool during 8-hour coding sessions. Highly recommend for remote workers looking for ergonomic support under $300.
+
+Review 4: Good build quality, sturdy metal base. The armrests are 3D adjustable (height, angle, forward/back) which works well with my standing desk converter. However, the recline tension knob is quite stiff to turn initially.
+
+Review 5: Bought 5 of these for our small design studio. Team loves them. Clean aesthetic, solid ergonomics, easy maintenance. 5/5 stars.`;
+
+  const FLIGHT_BOOKING_PROMPT =
+    `You are an AI travel assistant specializing in booking extraction and itinerary drafting. You analyze conversational travel requests and convert them into structured JSON itineraries while summarizing key traveler preferences, constraints, and follow-up recommendations.
+
+Extract the travel itinerary details and preferences from this user conversation:
+
+User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) to Tokyo (either NRT or HND) for cherry blossom season next spring. We want to depart around March 28 and return around April 12. We prefer non-stop flights if possible, but a short layover in Los Angeles or Honolulu is acceptable if business class award space is available. We both have dietary restrictions: I am strictly gluten-free and my partner is vegetarian. Also, we'd like to spend 4 days in Tokyo, 3 days in Kyoto, 2 days in Kanazawa, and then head back to Tokyo for shopping in Ginza before flying home. Can you extract our travel requirements, flight preferences, hotel preferences, draft daily routing, and list any missing information or recommendations for booking high-demand ryokans during peak season?`;
 
   const R = 100;
   const CIRCUMFERENCE = 2 * Math.PI * R;
 
   const WARM_RUNS = 5;
+
+  // Drafter lookahead for speculative decoding (MTP): the number of tokens the
+  // drafter proposes per verification step. Must match Chrome's drafter config.
+  const MTP_GAMMA = 4;
 
   const STORIES = {
     'language_model': {
@@ -50,7 +75,28 @@ Honestly I have had better luck buying dish towels at the local market than shop
       getCreateOptions() {
         return {};
       },
-      getPrompt: () => PROMPT
+      getPrompt: () => EMOJI_PROMPT
+    },
+    'mtp_summary': {
+      name: 'MTP Product Summary (Long-form)',
+      getCreateOptions() {
+        return { samplingMode: 'most-predictable' };
+      },
+      getPrompt: () => PRODUCT_SUMMARY_PROMPT
+    },
+    'mtp_flight': {
+      name: 'MTP Flight Booking (Structured)',
+      getCreateOptions() {
+        return { samplingMode: 'most-predictable' };
+      },
+      getPrompt: () => FLIGHT_BOOKING_PROMPT
+    },
+    'mtp_emoji': {
+      name: 'MTP Emoji Reviews (Short / Regression)',
+      getCreateOptions() {
+        return { samplingMode: 'most-predictable' };
+      },
+      getPrompt: () => EMOJI_PROMPT
     },
     'multimodal_image': {
       name: 'Multimodal (Image)',
@@ -127,8 +173,10 @@ Honestly I have had better luck buying dish towels at the local market than shop
     let firstTokenTime;
     let timeToFirstTokenMs = 0;
     let responseText = '';
+    let chunkCount = 0;
 
     for await (const chunk of stream) {
+      chunkCount++;
       if (!firstTokenTime) {
         firstTokenTime = performance.now();
         timeToFirstTokenMs = firstTokenTime - startTime;
@@ -143,9 +191,20 @@ Honestly I have had better luck buying dish towels at the local market than shop
     const tokensPerSecond =
       durationSec > 0 ? Math.max(0, tokens - 1) / durationSec : 0;
 
+    // Speculative decoding (MTP) acceptance rate.
+    // Accounts for partial final chunk cut off by EOS using expected value:
+    // A = (tokens - chunkCount) / (chunkCount - 0.5)
+    // Reported for every story, not just MTP ones: without speculation each
+    // chunk carries a single token, so this correctly reads ~0 and stays
+    // comparable across A/B arms once MTP is enabled by default.
+    const acceptanceRate = chunkCount > 0 ?
+      ((tokens - chunkCount) / (chunkCount - 0.5)) / MTP_GAMMA : 0;
+
     return {
       timeToFirstTokenMs,
       totalTimeMs,
+      acceptanceRate,
+      tokens,
       tokensPerSecond,
       responseText,
     };
@@ -178,6 +237,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
         const coldRes = await runPromptStream(session, story.getPrompt());
         storyMetrics.coldTimeToFirstTokenMs = coldRes.timeToFirstTokenMs;
         storyMetrics.coldTotalPromptTimeMs = coldRes.totalTimeMs;
+        storyMetrics.coldAcceptanceRate = coldRes.acceptanceRate;
         storyMetrics.coldTokensPerSecond = coldRes.tokensPerSecond;
 
         console.log(
@@ -189,6 +249,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
       // 3. Warm Runs
       storyMetrics.warmTimeToFirstTokenMs = [];
       storyMetrics.warmTotalPromptTimeMs = [];
+      storyMetrics.warmAcceptanceRate = [];
       storyMetrics.warmTokensPerSecond = [];
 
       for (let i = 0; i < WARM_RUNS; i++) {
@@ -196,11 +257,12 @@ Honestly I have had better luck buying dish towels at the local market than shop
           'running', `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, '--',
           'Running');
         const warmSession =
-            await LanguageModel.create(story.getCreateOptions());
+          await LanguageModel.create(story.getCreateOptions());
         try {
           const warmRes = await runPromptStream(warmSession, story.getPrompt());
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
+          storyMetrics.warmAcceptanceRate.push(warmRes.acceptanceRate);
           storyMetrics.warmTokensPerSecond.push(warmRes.tokensPerSecond);
 
           console.log(
@@ -224,14 +286,15 @@ Honestly I have had better luck buying dish towels at the local market than shop
     return arr.reduce((a, b) => a + b, 0) / arr.length;
   }
 
-  function createStoryCard(storyName, storyMetrics) {
+  function createStoryCard(storyKey, storyMetrics) {
+    const story = STORIES[storyKey];
     const template = document.getElementById('story-card-template');
     const card = template.content.cloneNode(true);
     const avgWarmTtft = average(storyMetrics.warmTimeToFirstTokenMs);
     const avgWarmTotal = average(storyMetrics.warmTotalPromptTimeMs);
     const avgWarmTps = average(storyMetrics.warmTokensPerSecond);
 
-    card.querySelector('.story-name').textContent = storyName;
+    card.querySelector('.story-name').textContent = story.name;
     card.querySelector('.story-badge').textContent =
       `${avgWarmTps.toFixed(2)} t/sec`;
     card.querySelector('.metric-session').textContent =
@@ -246,6 +309,8 @@ Honestly I have had better luck buying dish towels at the local market than shop
       `${Math.round(avgWarmTotal)} ms`;
     card.querySelector('.metric-tps-warm').textContent =
       `${avgWarmTps.toFixed(2)} t/sec`;
+    card.querySelector('.metric-sampling-mode').textContent =
+      story.getCreateOptions().samplingMode ?? 'default';
 
     return { card, avgWarmTps };
   }
@@ -281,16 +346,16 @@ Honestly I have had better luck buying dish towels at the local market than shop
           'Ensure experimental flags are enabled.');
       }
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const storiesParam = urlParams.get('stories');
+      const enabledStories =
+        storiesParam ? storiesParam.split(',') : ['language_model'];
+
       const availability = await LanguageModel.availability();
       if (!['available', 'downloadable', 'downloading'].includes(
         availability)) {
         throw new Error('Model not available (status: ' + availability + ')');
       }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const storiesParam = urlParams.get('stories');
-      const enabledStories =
-        storiesParam ? storiesParam.split(',') : ['language_model'];
 
       // TODO(https://crbug.com/549798622): We should rename this and the
       // associated metrics since they also include session creation.
@@ -332,7 +397,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
         }
 
         const supportStatus =
-            await LanguageModel.availability(story.getCreateOptions());
+          await LanguageModel.availability(story.getCreateOptions());
         if (supportStatus !== 'available') {
           console.log(
             `Model does not support capabilities for ${storyKey} ` +
@@ -362,8 +427,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
 
       let totalWarmTps = 0;
       for (const [storyKey, storyMetrics] of Object.entries(results)) {
-        const storyName = STORIES[storyKey].name;
-        const { card, avgWarmTps } = createStoryCard(storyName, storyMetrics);
+        const { card, avgWarmTps } = createStoryCard(storyKey, storyMetrics);
         storyResults.appendChild(card);
         totalWarmTps += avgWarmTps;
       }
