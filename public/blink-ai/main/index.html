@@ -30,33 +30,49 @@
       <div class="status-text waiting" id="status-text">Click 'Start' to begin the benchmark</div>
 
       <div class="results-panel" id="results-panel">
-        <div class="result-row">
+        <div class="result-row global-row">
           <span class="result-label">Model Download</span>
           <span class="result-value" id="res-download">--</span>
         </div>
-        <div class="result-row">
-          <span class="result-label">Session Creation</span>
-          <span class="result-value" id="res-session">--</span>
-        </div>
-        <div class="result-row">
-          <span class="result-label">Time to First Token (Cold)</span>
-          <span class="result-value" id="res-ttft">--</span>
-        </div>
-        <div class="result-row">
-          <span class="result-label">Time to First Token (Warm Avg)</span>
-          <span class="result-value" id="res-warm-ttft">--</span>
-        </div>
-        <div class="result-row">
-          <span class="result-label">Total Prompt Time (Cold)</span>
-          <span class="result-value" id="res-total">--</span>
-        </div>
-        <div class="result-row">
-          <span class="result-label">Total Prompt Time (Warm Avg)</span>
-          <span class="result-value" id="res-warm-total">--</span>
-        </div>
+        <div id="story-results"></div>
       </div>
     </div>
   </div>
+
+  <template id="story-card-template">
+    <div class="story-card">
+      <div class="story-header">
+        <span class="story-name"></span>
+        <span class="story-badge"></span>
+      </div>
+      <div class="story-metrics">
+        <div class="result-row">
+          <span class="result-label">Session Creation</span>
+          <span class="result-value metric-session"></span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Time to First Token (Cold)</span>
+          <span class="result-value metric-ttft-cold"></span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Time to First Token (Warm Avg)</span>
+          <span class="result-value metric-ttft-warm"></span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Total Prompt Time (Cold)</span>
+          <span class="result-value metric-total-cold"></span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Total Prompt Time (Warm Avg)</span>
+          <span class="result-value metric-total-warm"></span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Tokens Per Second (Warm Avg)</span>
+          <span class="result-value metric-tps-warm"></span>
+        </div>
+      </div>
+    </div>
+  </template>
 
   <div style="display: none;">
     <img id="input-image-apple" src="../media/apple.jpg">

@@ -8,11 +8,7 @@
   const resultsPanel = document.getElementById('results-panel');
 
   const resDownload = document.getElementById('res-download');
-  const resSession = document.getElementById('res-session');
-  const resTtft = document.getElementById('res-ttft');
-  const resWarmTtft = document.getElementById('res-warm-ttft');
-  const resTotal = document.getElementById('res-total');
-  const resWarmTotal = document.getElementById('res-warm-total');
+  const storyResults = document.getElementById('story-results');
 
   const img1 = document.getElementById('input-image-apple');
   const img2 = document.getElementById('input-image-orange');
@@ -207,7 +203,9 @@ Honestly I have had better luck buying dish towels at the local market than shop
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
           storyMetrics.warmTokensPerSecond.push(warmRes.tokensPerSecond);
 
-          console.log(`[Warm Run ${i + 1} Output for ${story.name}]: ${warmRes.responseText}`);
+          console.log(
+            `[Warm Run ${i + 1} Output for ${story.name}]: ` +
+            `${warmRes.responseText}`);
         } finally {
           warmSession.destroy();
         }
@@ -219,6 +217,37 @@ Honestly I have had better luck buying dish towels at the local market than shop
       console.error(`Error in runStory for ${story.name}:`, e);
       throw e;
     }
+  }
+
+  function average(arr) {
+    if (!arr || arr.length === 0) return 0;
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
+  }
+
+  function createStoryCard(storyName, storyMetrics) {
+    const template = document.getElementById('story-card-template');
+    const card = template.content.cloneNode(true);
+    const avgWarmTtft = average(storyMetrics.warmTimeToFirstTokenMs);
+    const avgWarmTotal = average(storyMetrics.warmTotalPromptTimeMs);
+    const avgWarmTps = average(storyMetrics.warmTokensPerSecond);
+
+    card.querySelector('.story-name').textContent = storyName;
+    card.querySelector('.story-badge').textContent =
+      `${avgWarmTps.toFixed(2)} t/sec`;
+    card.querySelector('.metric-session').textContent =
+      `${Math.round(storyMetrics.sessionCreationTimeMs)} ms`;
+    card.querySelector('.metric-ttft-cold').textContent =
+      `${Math.round(storyMetrics.coldTimeToFirstTokenMs)} ms`;
+    card.querySelector('.metric-ttft-warm').textContent =
+      `${Math.round(avgWarmTtft)} ms`;
+    card.querySelector('.metric-total-cold').textContent =
+      `${Math.round(storyMetrics.coldTotalPromptTimeMs)} ms`;
+    card.querySelector('.metric-total-warm').textContent =
+      `${Math.round(avgWarmTotal)} ms`;
+    card.querySelector('.metric-tps-warm').textContent =
+      `${avgWarmTps.toFixed(2)} t/sec`;
+
+    return { card, avgWarmTps };
   }
 
   function flattenResults(results) {
@@ -243,6 +272,7 @@ Honestly I have had better luck buying dish towels at the local market than shop
     if (startBtn) startBtn.disabled = true;
     window.testStatus = 'running';
     resultsPanel.classList.remove('visible');
+    storyResults.innerHTML = '';
 
     try {
       if (typeof LanguageModel === 'undefined') {
@@ -326,35 +356,23 @@ Honestly I have had better luck buying dish towels at the local market than shop
 
       window.testStatus = 'success';
 
-      const firstStoryKey = Object.keys(results)[0];
-      const firstStoryMetrics = results[firstStoryKey];
-
       resDownload.textContent = downloadTimeMs > 0 ?
         Math.round(downloadTimeMs) + ' ms' :
         'Cached (0 ms)';
-      resSession.textContent =
-        Math.round(firstStoryMetrics.sessionCreationTimeMs) + ' ms';
-      resTtft.textContent =
-        Math.round(firstStoryMetrics.coldTimeToFirstTokenMs) + ' ms';
-      resTotal.textContent =
-        Math.round(firstStoryMetrics.coldTotalPromptTimeMs) + ' ms';
 
-      const avgWarmTtft =
-        firstStoryMetrics.warmTimeToFirstTokenMs.reduce((a, b) => a + b, 0) /
-        WARM_RUNS;
-      const avgWarmTotal =
-        firstStoryMetrics.warmTotalPromptTimeMs.reduce((a, b) => a + b, 0) /
-        WARM_RUNS;
-      resWarmTtft.textContent = Math.round(avgWarmTtft) + ' ms (avg)';
-      resWarmTotal.textContent = Math.round(avgWarmTotal) + ' ms (avg)';
+      let totalWarmTps = 0;
+      for (const [storyKey, storyMetrics] of Object.entries(results)) {
+        const storyName = STORIES[storyKey].name;
+        const { card, avgWarmTps } = createStoryCard(storyName, storyMetrics);
+        storyResults.appendChild(card);
+        totalWarmTps += avgWarmTps;
+      }
 
       resultsPanel.classList.add('visible');
 
-      const avgWarmTps =
-        firstStoryMetrics.warmTokensPerSecond.reduce((a, b) => a + b, 0) /
-        WARM_RUNS;
+      const overallAvgTps = totalWarmTps / Object.keys(results).length;
       updateUI(
-        'success', 'Benchmark Completed!', avgWarmTps.toFixed(2), 't/sec');
+        'success', 'Benchmark Completed!', overallAvgTps.toFixed(2), 't/sec');
       return window.metrics;
 
     } catch (e) {

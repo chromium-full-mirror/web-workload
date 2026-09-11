@@ -24,7 +24,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 520px;
+  max-width: 600px;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -184,10 +184,54 @@ h1 {
 }
 
 .results-panel.visible {
-  max-height: 300px;
+  max-height: 4000px;
   padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   margin-top: 20px;
+  overflow-y: auto;
+}
+
+.global-row {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.story-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+.story-card:first-child {
+  margin-top: 0;
+}
+
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.story-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.story-badge {
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(187, 134, 252, 0.15);
+  color: var(--secondary);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: monospace;
 }
 
 .result-row {
