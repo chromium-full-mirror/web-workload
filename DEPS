@@ -150,6 +150,10 @@ vars = {
   # the commit queue can handle CLs rolling Motionmark v1.0
   # and whatever else without interference from each other.
   'motionmark_1.0_revision': 'beeb2a45b34039ff57b5263147c1e0134a2b7738',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Motionmark v2.0-custom
+  # and whatever else without interference from each other.
+  'motionmark_2.0-custom_revision': '6b35ed1bc66b6e9e4bbb87954908c21a0d0c4727',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling web-tests main
@@ -224,6 +228,8 @@ deps = {
     Var('chromium_motionmark_git') + '@' + Var('motionmark_1.1_revision'),
   'public/motionmark/v1.0':
     Var('chromium_motionmark_git') + '@' + Var('motionmark_1.0_revision'),
+  'public/motionmark/v2.0-custom':
+    Var('chromium_motionmark_git') + '@' + Var('motionmark_2.0-custom_revision'),
   'public/web-tests/main':
     Var('chromium_web_tests_git') + '@' + Var('web_tests_main_revision'),
   'public/webai-compute-benchmark/main':
