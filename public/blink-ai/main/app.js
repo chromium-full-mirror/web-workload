@@ -69,40 +69,41 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
   // drafter proposes per verification step. Must match Chrome's drafter config.
   const MTP_GAMMA = 4;
 
+  // Shared create options. Frozen so stories can hand the same object to
+  // callers without copying it first. Object.freeze is shallow, which is
+  // sufficient here: callers only read or spread the top level.
+  const DEFAULT_CREATE_OPTIONS = Object.freeze({});
+  const MTP_CREATE_OPTIONS =
+    Object.freeze({ samplingMode: 'most-predictable' });
+  const IMAGE_INPUTS = Object.freeze({ expectedInputs: [{ type: 'image' }] });
+  const AUDIO_INPUTS = Object.freeze({ expectedInputs: [{ type: 'audio' }] });
+
+  // `getPrompt` stays lazy because some prompts depend on assets that are
+  // loaded after this table is defined.
   const STORIES = {
     'language_model': {
       name: 'Language Model (Text)',
-      getCreateOptions() {
-        return {};
-      },
+      createOptions: DEFAULT_CREATE_OPTIONS,
       getPrompt: () => EMOJI_PROMPT
     },
     'mtp_summary': {
       name: 'MTP Product Summary (Long-form)',
-      getCreateOptions() {
-        return { samplingMode: 'most-predictable' };
-      },
+      createOptions: MTP_CREATE_OPTIONS,
       getPrompt: () => PRODUCT_SUMMARY_PROMPT
     },
     'mtp_flight': {
       name: 'MTP Flight Booking (Structured)',
-      getCreateOptions() {
-        return { samplingMode: 'most-predictable' };
-      },
+      createOptions: MTP_CREATE_OPTIONS,
       getPrompt: () => FLIGHT_BOOKING_PROMPT
     },
     'mtp_emoji': {
       name: 'MTP Emoji Reviews (Short / Regression)',
-      getCreateOptions() {
-        return { samplingMode: 'most-predictable' };
-      },
+      createOptions: MTP_CREATE_OPTIONS,
       getPrompt: () => EMOJI_PROMPT
     },
     'multimodal_image': {
       name: 'Multimodal (Image)',
-      getCreateOptions() {
-        return { expectedInputs: [{ type: 'image' }] };
-      },
+      createOptions: IMAGE_INPUTS,
       getPrompt: () => [{
         role: 'user',
         content: [
@@ -113,9 +114,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     },
     'multimodal_images': {
       name: 'Multimodal (Multiple Images)',
-      getCreateOptions() {
-        return { expectedInputs: [{ type: 'image' }] };
-      },
+      createOptions: IMAGE_INPUTS,
       getPrompt: () => [{
         role: 'user',
         content: [
@@ -130,9 +129,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     },
     'multimodal_audio': {
       name: 'Multimodal (Audio)',
-      getCreateOptions() {
-        return { expectedInputs: [{ type: 'audio' }] };
-      },
+      createOptions: AUDIO_INPUTS,
       getPrompt: () => {
         if (!cachedAudioBuffer) {
           throw new Error('Audio asset was not preloaded.');
@@ -225,7 +222,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
 
     try {
       const startCreate = performance.now();
-      let session = await LanguageModel.create(story.getCreateOptions());
+      let session = await LanguageModel.create(story.createOptions);
       const endCreate = performance.now();
       setProgress(100);
 
@@ -257,7 +254,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
           'running', `Executing warm prompt ${i + 1}/${WARM_RUNS}...`, '--',
           'Running');
         const warmSession =
-          await LanguageModel.create(story.getCreateOptions());
+          await LanguageModel.create(story.createOptions);
         try {
           const warmRes = await runPromptStream(warmSession, story.getPrompt());
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
@@ -310,7 +307,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     card.querySelector('.metric-tps-warm').textContent =
       `${avgWarmTps.toFixed(2)} t/sec`;
     card.querySelector('.metric-sampling-mode').textContent =
-      story.getCreateOptions().samplingMode ?? 'default';
+      story.createOptions.samplingMode ?? 'default';
 
     return { card, avgWarmTps };
   }
@@ -397,7 +394,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
         }
 
         const supportStatus =
-          await LanguageModel.availability(story.getCreateOptions());
+          await LanguageModel.availability(story.createOptions);
         if (supportStatus !== 'available') {
           console.log(
             `Model does not support capabilities for ${storyKey} ` +
