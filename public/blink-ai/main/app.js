@@ -84,22 +84,25 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     'language_model': {
       name: 'Language Model (Text)',
       createOptions: DEFAULT_CREATE_OPTIONS,
-      getPrompt: () => EMOJI_PROMPT
+      getPrompt: () => EMOJI_PROMPT,
     },
     'mtp_summary': {
       name: 'MTP Product Summary (Long-form)',
       createOptions: MTP_CREATE_OPTIONS,
-      getPrompt: () => PRODUCT_SUMMARY_PROMPT
+      getPrompt: () => PRODUCT_SUMMARY_PROMPT,
+      recordAcceptanceRate: true,
     },
     'mtp_flight': {
       name: 'MTP Flight Booking (Structured)',
       createOptions: MTP_CREATE_OPTIONS,
-      getPrompt: () => FLIGHT_BOOKING_PROMPT
+      getPrompt: () => FLIGHT_BOOKING_PROMPT,
+      recordAcceptanceRate: true,
     },
     'mtp_emoji': {
       name: 'MTP Emoji Reviews (Short / Regression)',
       createOptions: MTP_CREATE_OPTIONS,
-      getPrompt: () => EMOJI_PROMPT
+      getPrompt: () => EMOJI_PROMPT,
+      recordAcceptanceRate: true,
     },
     'multimodal_image': {
       name: 'Multimodal (Image)',
@@ -110,7 +113,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
           { type: 'text', value: 'Describe the image.' },
           { type: 'image', value: img1 }
         ]
-      }]
+      }],
     },
     'multimodal_images': {
       name: 'Multimodal (Multiple Images)',
@@ -125,7 +128,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
           { type: 'image', value: img1 }, { type: 'image', value: img2 },
           { type: 'image', value: img3 }, { type: 'image', value: img4 }
         ]
-      }]
+      }],
     },
     'multimodal_audio': {
       name: 'Multimodal (Audio)',
@@ -141,7 +144,7 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
             { type: 'audio', value: cachedAudioBuffer }
           ]
         }];
-      }
+      },
     }
   };
 
@@ -191,9 +194,8 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     // Speculative decoding (MTP) acceptance rate.
     // Accounts for partial final chunk cut off by EOS using expected value:
     // A = (tokens - chunkCount) / (chunkCount - 0.5)
-    // Reported for every story, not just MTP ones: without speculation each
-    // chunk carries a single token, so this correctly reads ~0 and stays
-    // comparable across A/B arms once MTP is enabled by default.
+    // Emitted to window.metrics only for MTP stories to avoid noise and
+    // dead series on non-MTP stories.
     const acceptanceRate = chunkCount > 0 ?
       ((tokens - chunkCount) / (chunkCount - 0.5)) / MTP_GAMMA : 0;
 
@@ -234,7 +236,9 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
         const coldRes = await runPromptStream(session, story.getPrompt());
         storyMetrics.coldTimeToFirstTokenMs = coldRes.timeToFirstTokenMs;
         storyMetrics.coldTotalPromptTimeMs = coldRes.totalTimeMs;
-        storyMetrics.coldAcceptanceRate = coldRes.acceptanceRate;
+        if (story.recordAcceptanceRate) {
+          storyMetrics.coldAcceptanceRate = coldRes.acceptanceRate;
+        }
         storyMetrics.coldTokensPerSecond = coldRes.tokensPerSecond;
 
         console.log(
@@ -246,7 +250,9 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
       // 3. Warm Runs
       storyMetrics.warmTimeToFirstTokenMs = [];
       storyMetrics.warmTotalPromptTimeMs = [];
-      storyMetrics.warmAcceptanceRate = [];
+      if (story.recordAcceptanceRate) {
+        storyMetrics.warmAcceptanceRate = [];
+      }
       storyMetrics.warmTokensPerSecond = [];
 
       for (let i = 0; i < WARM_RUNS; i++) {
@@ -259,7 +265,9 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
           const warmRes = await runPromptStream(warmSession, story.getPrompt());
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
-          storyMetrics.warmAcceptanceRate.push(warmRes.acceptanceRate);
+          if (story.recordAcceptanceRate) {
+            storyMetrics.warmAcceptanceRate.push(warmRes.acceptanceRate);
+          }
           storyMetrics.warmTokensPerSecond.push(warmRes.tokensPerSecond);
 
           console.log(
