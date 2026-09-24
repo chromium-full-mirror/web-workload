@@ -79,6 +79,9 @@
 [submodule "public/motionmark/v2.0-custom"]
 	path = public/motionmark/v2.0-custom
 	url = https://chromium.googlesource.com/external/github.com/WebKit/MotionMark
+[submodule "public/motionmark/v2.0-experimental-custom"]
+	path = public/motionmark/v2.0-experimental-custom
+	url = https://chromium.googlesource.com/external/github.com/WebKit/MotionMark
 [submodule "public/web-tests/main"]
 	path = public/web-tests/main
 	url = https://chromium.googlesource.com/chromium/web-tests

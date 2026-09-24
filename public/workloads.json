@@ -240,6 +240,15 @@
             "tags": ["press-benchmark", "js", "apple", "css", "animation", "canvas", "svg", "fork"]
         },
         {
+            "title": "Motionmark 2.0 Experimental Custom",
+            "help": "Development version",
+            "group": "motionmark",
+            "version": "2.0-experimental-custom",
+            "path": "MotionMark",
+            "source": "https://chromium.googlesource.com/external/github.com/WebKit/MotionMark/+/refs/heads/woa-2.0-experimental-custom",
+            "tags": ["press-benchmark", "js", "apple", "css", "animation", "canvas", "svg", "fork"]
+        },
+        {
             "title": "DOM Operations Benchmark 1.0",
             "help": "DOM API stress benchmark",
             "group": "dom-operations-benchmark",
