@@ -15,6 +15,11 @@ echo "Staging " $DIR;
 
 URL=$(echo $RAW_URL_LINE | grep -oE 'https://[^ ]+');
 
+if [ -z "$URL" ]; then
+  "$DIR/firebase-error-helper.sh" "Failed to stage to Firebase (no Channel URL found)."
+  exit 1
+fi
+
 echo "";
 echo "RUNNING TESTS ON $URL";
 vpython3 ./test-deployment.py $URL;

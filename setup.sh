@@ -9,4 +9,4 @@ then
 fi
 
 echo "FIREBASE AUTHENTICATE";
-firebase login
+firebase login --reauth

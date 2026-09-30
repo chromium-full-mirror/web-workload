@@ -19,5 +19,5 @@ echo "Deploying " $DIR;
 # done
 
 for ID in `seq 0 34`; do
-    firebase deploy --only hosting:$ID;
+    firebase deploy --only hosting:$ID || "$DIR/firebase-error-helper.sh" || exit 1;
 done

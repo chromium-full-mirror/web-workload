@@ -11,4 +11,4 @@ if [ "$ANSWER" != "${ANSWER#[Yy]}" ] ;then
 fi
 
 echo "Deploying " $DIR;
-firebase deploy --only hosting:default;
+firebase deploy --only hosting:default || "$DIR/firebase-error-helper.sh";
