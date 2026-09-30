@@ -210,9 +210,9 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
   }
 
   async function offloadModel() {
-    console.log('Sleeping 90s to allow model offloading...');
-    updateUI('running', 'Waiting for model offload (90s)...', '--', 'Waiting');
-    await new Promise(resolve => setTimeout(resolve, 90000));
+    console.log('Sleeping 12s to allow model offloading...');
+    updateUI('running', 'Waiting for model offload (12s)...', '--', 'Waiting');
+    await new Promise(resolve => setTimeout(resolve, 12000));
   }
 
   async function runStory(story) {
