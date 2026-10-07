@@ -8,5 +8,14 @@ then
   exit 1
 fi
 
+if ! command -v git-lfs 2>&1 >/dev/null
+then
+  echo "PLEASE INSTALL GIT LFS";
+  echo "https://git-lfs.com"
+  echo "   linux: sudo apt-get install git-lfs"
+  echo "   macos: brew install git-lfs"
+  exit 1
+fi
+
 echo "FIREBASE AUTHENTICATE";
 firebase login --reauth

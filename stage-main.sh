@@ -5,6 +5,8 @@ DIR=`dirname "$DIR"`;
 cd "$DIR"
 DIR=`pwd -P`
 
+"$DIR/sync_and_build.sh" || exit 1
+
 echo "Staging " $DIR;
 {
   RAW_URL_LINE=$(\
