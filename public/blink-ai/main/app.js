@@ -60,6 +60,12 @@ Extract the travel itinerary details and preferences from this user conversation
 
 User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) to Tokyo (either NRT or HND) for cherry blossom season next spring. We want to depart around March 28 and return around April 12. We prefer non-stop flights if possible, but a short layover in Los Angeles or Honolulu is acceptable if business class award space is available. We both have dietary restrictions: I am strictly gluten-free and my partner is vegetarian. Also, we'd like to spend 4 days in Tokyo, 3 days in Kyoto, 2 days in Kanazawa, and then head back to Tokyo for shopping in Ginza before flying home. Can you extract our travel requirements, flight preferences, hotel preferences, draft daily routing, and list any missing information or recommendations for booking high-demand ryokans during peak season?`;
 
+  const ARTICLE_SUMMARY_PROMPT =
+    `Please analyze and summarize the following article in JSON format matching this schema:
+{"type": "object", "properties": {"title": {"type": "string"}, "shortParagraph": {"type": "string"}, "bulletPoints": {"type": "array", "items": {"type": "string"}}, "rating": {"type": "number"}}, "required": ["title", "shortParagraph", "bulletPoints", "rating"]}
+Article:
+The cat (Felis catus), also called domestic cat and house cat, is a small domesticated carnivorous mammal. It is a member of Felidae, the family of mammals in the order Carnivora also colloquially referred to as cats. It is an obligate carnivore, requiring a predominantly meat-based diet. Its retractable claws are adapted to killing small prey species such as mice and rats. It has a strong, flexible body, quick reflexes, and sharp teeth, and its night vision and sense of smell are well developed. It is a social species, but a solitary hunter and a crepuscular predator. Cat communication includes meowing, purring, trilling, hissing, growling, grunting, body language, and scent marking. It can hear sounds too faint or too high in frequency for human ears, such as those made by small mammals. It secretes and perceives pheromones. Cat intelligence is evident in its ability to adapt, learn through observation, and solve problems. The domestic cat is the only domesticated species of the family Felidae. Advances in archaeology and genetics have shown that the domestication of the cat started in the Near East around 7500 BCE. Today, the domestic cat occurs across the globe and is valued by humans for companionship and its ability to kill vermin. It is commonly kept as a pet, working cat, and pedigreed cat shown at cat fancy events. Out of the estimated 600 million domestic cats worldwide, 400 million reside in Asia, including 58 million in China. About 73.8 million cats are estimated to live in the United States, and about 10.9 million cats in the United Kingdom. It also ranges freely as a feral cat, avoiding human contact. Pet abandonment contributes to increasing of the global feral cat population, which has driven the decline of bird, mammal, and reptile species. Population control includes spaying and neutering.`;
+
   const R = 100;
   const CIRCUMFERENCE = 2 * Math.PI * R;
 
@@ -77,6 +83,42 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     Object.freeze({ samplingMode: 'most-predictable' });
   const IMAGE_INPUTS = Object.freeze({ expectedInputs: [{ type: 'image' }] });
   const AUDIO_INPUTS = Object.freeze({ expectedInputs: [{ type: 'audio' }] });
+
+  // Shared prompt options, passed to promptStreaming() the same way
+  // `createOptions` is passed to LanguageModel.create().
+  const DEFAULT_PROMPT_OPTIONS = Object.freeze({});
+  // Constrained decoding (`responseConstraint`) for ARTICLE_SUMMARY_PROMPT.
+  const CONSTRAINED_SUMMARY_PROMPT_OPTIONS = Object.freeze({
+    responseConstraint: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          description: 'A concise and engaging title for the summary.',
+        },
+        shortParagraph: {
+          type: 'string',
+          description:
+            'A short paragraph summarizing the main points of the article.',
+        },
+        bulletPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'A list of 3-5 key takeaways from the article.',
+        },
+        rating: {
+          type: 'number',
+          minimum: 1,
+          maximum: 5,
+          description:
+            'A rating of the article\'s quality or usefulness from 1 to 5.',
+        },
+      },
+      required: ['title', 'shortParagraph', 'bulletPoints', 'rating'],
+      // Ensures the model does not add any other fields.
+      additionalProperties: false,
+    },
+  });
 
   // `getPrompt` stays lazy because some prompts depend on assets that are
   // loaded after this table is defined.
@@ -102,6 +144,13 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
       name: 'MTP Emoji Reviews (Short / Regression)',
       createOptions: MTP_CREATE_OPTIONS,
       getPrompt: () => EMOJI_PROMPT,
+      recordAcceptanceRate: true,
+    },
+    'mtp_constrained_summary': {
+      name: 'MTP Article Summary (Constrained JSON)',
+      createOptions: MTP_CREATE_OPTIONS,
+      promptOptions: CONSTRAINED_SUMMARY_PROMPT_OPTIONS,
+      getPrompt: () => ARTICLE_SUMMARY_PROMPT,
       recordAcceptanceRate: true,
     },
     'multimodal_image': {
@@ -165,11 +214,24 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
     }
   }
 
-  async function runPromptStream(session, promptContent) {
+  // Output tokens for a constrained prompt. Chrome adds the response schema to
+  // the model input, but measureContextUsage() does not count it, so the
+  // contextUsage delta would over-count output tokens. Tokenize the response
+  // text instead, minus the fixed per-measurement overhead. The +1 matches the
+  // end-of-turn token included by the contextUsage-based count below, so
+  // constrained and unconstrained stories are counted the same way.
+  async function countResponseTokens(session, responseText) {
+    const withText = await session.measureContextUsage(responseText);
+    const overhead = await session.measureContextUsage('');
+    return Math.max(0, withText - overhead + 1);
+  }
+
+  async function runPromptStream(
+    session, promptContent, promptOptions = DEFAULT_PROMPT_OPTIONS) {
     const initialUsage = session.contextUsage;
     const inputTokens = await session.measureContextUsage(promptContent);
     const startTime = performance.now();
-    const stream = session.promptStreaming(promptContent);
+    const stream = session.promptStreaming(promptContent, promptOptions);
     let firstTokenTime;
     let timeToFirstTokenMs = 0;
     let responseText = '';
@@ -186,7 +248,9 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
 
     const totalTimeMs = performance.now() - startTime;
     const durationSec = (performance.now() - firstTokenTime) / 1000;
-    const tokens = Math.max(0, session.contextUsage - initialUsage - inputTokens - 3);
+    const tokens = promptOptions.responseConstraint ?
+      await countResponseTokens(session, responseText) :
+      Math.max(0, session.contextUsage - initialUsage - inputTokens - 3);
     // Exclude the first token to measure decode rate after TTFT.
     const tokensPerSecond =
       durationSec > 0 ? Math.max(0, tokens - 1) / durationSec : 0;
@@ -233,7 +297,8 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
       // 2. Cold Run
       try {
         updateUI('running', 'Executing cold prompt...', '--', 'Running');
-        const coldRes = await runPromptStream(session, story.getPrompt());
+        const coldRes = await runPromptStream(
+          session, story.getPrompt(), story.promptOptions);
         storyMetrics.coldTimeToFirstTokenMs = coldRes.timeToFirstTokenMs;
         storyMetrics.coldTotalPromptTimeMs = coldRes.totalTimeMs;
         if (story.recordAcceptanceRate) {
@@ -262,7 +327,8 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
         const warmSession =
           await LanguageModel.create(story.createOptions);
         try {
-          const warmRes = await runPromptStream(warmSession, story.getPrompt());
+          const warmRes = await runPromptStream(
+            warmSession, story.getPrompt(), story.promptOptions);
           storyMetrics.warmTimeToFirstTokenMs.push(warmRes.timeToFirstTokenMs);
           storyMetrics.warmTotalPromptTimeMs.push(warmRes.totalTimeMs);
           if (story.recordAcceptanceRate) {
