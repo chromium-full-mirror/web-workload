@@ -66,6 +66,11 @@ User: Hi! My partner and I are looking to take a trip from San Francisco (SFO) t
 Article:
 The cat (Felis catus), also called domestic cat and house cat, is a small domesticated carnivorous mammal. It is a member of Felidae, the family of mammals in the order Carnivora also colloquially referred to as cats. It is an obligate carnivore, requiring a predominantly meat-based diet. Its retractable claws are adapted to killing small prey species such as mice and rats. It has a strong, flexible body, quick reflexes, and sharp teeth, and its night vision and sense of smell are well developed. It is a social species, but a solitary hunter and a crepuscular predator. Cat communication includes meowing, purring, trilling, hissing, growling, grunting, body language, and scent marking. It can hear sounds too faint or too high in frequency for human ears, such as those made by small mammals. It secretes and perceives pheromones. Cat intelligence is evident in its ability to adapt, learn through observation, and solve problems. The domestic cat is the only domesticated species of the family Felidae. Advances in archaeology and genetics have shown that the domestication of the cat started in the Near East around 7500 BCE. Today, the domestic cat occurs across the globe and is valued by humans for companionship and its ability to kill vermin. It is commonly kept as a pet, working cat, and pedigreed cat shown at cat fancy events. Out of the estimated 600 million domestic cats worldwide, 400 million reside in Asia, including 58 million in China. About 73.8 million cats are estimated to live in the United States, and about 10.9 million cats in the United Kingdom. It also ranges freely as a feral cat, avoiding human contact. Pet abandonment contributes to increasing of the global feral cat population, which has driven the decline of bird, mammal, and reptile species. Population control includes spaying and neutering.`;
 
+  const TOOL_CALLING_PROMPT =
+    'Hello, how are you? What is the current weather in San Francisco, CA in ' +
+    'fahrenheit, and what is the current stock price of GOOG? Use the ' +
+    'provided tools.';
+
   const R = 100;
   const CIRCUMFERENCE = 2 * Math.PI * R;
 
@@ -83,6 +88,45 @@ The cat (Felis catus), also called domestic cat and house cat, is a small domest
     Object.freeze({ samplingMode: 'most-predictable' });
   const IMAGE_INPUTS = Object.freeze({ expectedInputs: [{ type: 'image' }] });
   const AUDIO_INPUTS = Object.freeze({ expectedInputs: [{ type: 'audio' }] });
+  const TOOL_CALLING_CREATE_OPTIONS = Object.freeze({
+    temperature: 0,
+    topK: 1,
+    expectedOutputs: [{ type: 'text' }, { type: 'tool-call' }],
+    tools: [
+      {
+        name: 'get_weather',
+        description: 'Get the current weather for a given city.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            location: {
+              type: 'string',
+              description: 'The city and state, e.g. San Francisco, CA',
+            },
+            unit: {
+              type: 'string',
+              enum: ['celsius', 'fahrenheit'],
+            },
+          },
+          required: ['location'],
+        },
+      },
+      {
+        name: 'get_stock_price',
+        description: 'Get the current stock price for a given ticker symbol.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            ticker: {
+              type: 'string',
+              description: 'The stock ticker symbol, e.g. GOOG',
+            },
+          },
+          required: ['ticker'],
+        },
+      },
+    ],
+  });
 
   // Shared prompt options, passed to promptStreaming() the same way
   // `createOptions` is passed to LanguageModel.create().
@@ -127,6 +171,11 @@ The cat (Felis catus), also called domestic cat and house cat, is a small domest
       name: 'Language Model (Text)',
       createOptions: DEFAULT_CREATE_OPTIONS,
       getPrompt: () => EMOJI_PROMPT,
+    },
+    'tool_calling': {
+      name: 'Language Model (Tool Calling)',
+      createOptions: TOOL_CALLING_CREATE_OPTIONS,
+      getPrompt: () => TOOL_CALLING_PROMPT,
     },
     'mtp_summary': {
       name: 'MTP Product Summary (Long-form)',
@@ -226,34 +275,64 @@ The cat (Felis catus), also called domestic cat and house cat, is a small domest
     return Math.max(0, withText - overhead + 1);
   }
 
+  async function countChunkTokens(session, chunk) {
+    if (!chunk) return 0;
+    const input = typeof chunk === 'string' ?
+      chunk :
+      [{ role: 'assistant', content: [chunk] }];
+    const withChunk = await session.measureContextUsage(input);
+    const overhead = await session.measureContextUsage('');
+    return Math.max(0, withChunk - overhead);
+  }
+
   async function runPromptStream(
     session, promptContent, promptOptions = DEFAULT_PROMPT_OPTIONS) {
     const initialUsage = session.contextUsage;
     const inputTokens = await session.measureContextUsage(promptContent);
     const startTime = performance.now();
     const stream = session.promptStreaming(promptContent, promptOptions);
-    let firstTokenTime;
+    let firstChunk;
+    let firstChunkTime;
     let timeToFirstTokenMs = 0;
     let responseText = '';
     let chunkCount = 0;
 
     for await (const chunk of stream) {
       chunkCount++;
-      if (!firstTokenTime) {
-        firstTokenTime = performance.now();
-        timeToFirstTokenMs = firstTokenTime - startTime;
+      if (!firstChunkTime) {
+        firstChunk = chunk;
+        firstChunkTime = performance.now();
+        timeToFirstTokenMs = firstChunkTime - startTime;
       }
-      responseText += chunk;
+      if (typeof chunk === 'string') {
+        responseText += chunk;
+      } else if (chunk && chunk.type === 'tool-call' && chunk.value) {
+        responseText += JSON.stringify({
+          type: chunk.type,
+          value: {
+            callId: chunk.value.callId ?? chunk.value.callID,
+            name: chunk.value.name,
+            arguments: chunk.value.arguments,
+          },
+        });
+      } else if (chunk && chunk.type === 'text') {
+        responseText += chunk.value;
+      } else {
+        responseText += JSON.stringify(chunk);
+      }
     }
 
     const totalTimeMs = performance.now() - startTime;
-    const durationSec = (performance.now() - firstTokenTime) / 1000;
+    const durationSec = (performance.now() - firstChunkTime) / 1000;
     const tokens = promptOptions.responseConstraint ?
       await countResponseTokens(session, responseText) :
       Math.max(0, session.contextUsage - initialUsage - inputTokens - 3);
-    // Exclude the first token to measure decode rate after TTFT.
-    const tokensPerSecond =
-      durationSec > 0 ? Math.max(0, tokens - 1) / durationSec : 0;
+    const firstChunkTokens = await countChunkTokens(session, firstChunk);
+    // Exclude the first chunk's tokens to measure decode rate after the first
+    // chunk arrives.
+    const tokensPerSecond = durationSec > 0 ?
+      Math.max(0, tokens - firstChunkTokens) / durationSec :
+      0;
 
     // Speculative decoding (MTP) acceptance rate.
     // Accounts for partial final chunk cut off by EOS using expected value:
