@@ -80,6 +80,10 @@ vars = {
   # the commit queue can handle CLs rolling Speedometer v2.0
   # and whatever else without interference from each other.
   'speedometer_2.0_revision': '732af0dfe867f8815e662ac637357e55f285dbbb',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling Speedometer v1.0
+  # and whatever else without interference from each other.
+  'speedometer_1.0_revision': '4360d5cb4f1415c94da1f0108c1717ef9c5e9874',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling JetStream v3.0-custom
@@ -196,6 +200,8 @@ deps = {
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.1-custom_revision'),
   'public/speedometer/v2.0':
     Var('chromium_speedometer_git') + '@' + Var('speedometer_2.0_revision'),
+  'public/speedometer/v1.0':
+    Var('chromium_speedometer_git') + '@' + Var('speedometer_1.0_revision'),
   # JetStream Variants:
   'public/jetstream/main-custom':
     Var('chromium_jetstream_git') + '@' + Var('jetstream_main-custom_revision'),

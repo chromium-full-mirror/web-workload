@@ -80,6 +80,15 @@
             "tags": ["press-benchmark", "dom", "js", "apple"]
         },
         {
+            "title": "Speedometer 1.0",
+            "help": "Official version",
+            "group": "speedometer",
+            "version": "1.0",
+            "url": "https://browserbench.org/Speedometer",
+            "source": "https://github.com/WebKit/WebKit/tree/main/Websites/browserbench.org/Speedometer",
+            "tags": ["press-benchmark", "dom", "js", "apple"]
+        },
+        {
             "title": "JetStream Main",
             "help": "Development version",
             "group": "jetstream",

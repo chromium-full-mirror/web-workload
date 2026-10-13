@@ -25,6 +25,9 @@
 [submodule "public/speedometer/v2.0"]
 	path = public/speedometer/v2.0
 	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
+[submodule "public/speedometer/v1.0"]
+	path = public/speedometer/v1.0
+	url = https://chromium.googlesource.com/external/github.com/WebKit/Speedometer
 [submodule "public/jetstream/main-custom"]
 	path = public/jetstream/main-custom
 	url = https://chromium.googlesource.com/external/github.com/WebKit/JetStream
