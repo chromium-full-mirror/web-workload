@@ -294,6 +294,15 @@
             "tags": ["webai-benchmark"]
         },
         {
+            "title": "WebAI Compute Benchmark Mobile",
+            "help": "Mobile Specific Workloads",
+            "group": "webai-compute-benchmark",
+            "branch": "main",
+            "params": "iterationCount=3&suites=Feature-Extraction-wasm%2CSentence-Similarity-wasm%2CBackground-Removal-wasm%2CText-Reranking-wasm%2CSFW-Image-Classification-wasm%2CZero-shot-Image-Classification-wasm%2CText-to-Speech-wasm%2CMask-Generation-wasm%2CImage-Segmentation-LiteRT.js-wasm%2CImage-Classification-LiteRT.js-wasm%2CHand-Detection-LiteRT.js-wasm",
+            "source": "https://github.com/GoogleChrome/webai-compute-benchmark/tree/main",
+            "tags": ["webai-benchmark"]
+        },
+        {
             "title": "Built-in AI Benchmark",
             "help": "Built-in AI Performance Benchmark",
             "group": "blink-ai",
