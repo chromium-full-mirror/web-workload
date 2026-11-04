@@ -345,7 +345,13 @@ function createLanguageModelStory(storyDef) {
 }
 
 export const API_CONFIG = Object.freeze({
+  name: 'language_model',
   label: 'LanguageModel',
+  // OnDeviceModelService keeps model weights in memory until the 10s idle
+  // timeout expires after session.destroy(). APIs that release models
+  // synchronously on destroy() without a service idle timer (e.g.
+  // LanguageDetector running TFLite in the renderer) can set this to false.
+  needsOffload: true,
   defaultStories: Object.freeze(['language_model']),
   stories: STORIES,
   isSupported: () => typeof LanguageModel !== 'undefined',

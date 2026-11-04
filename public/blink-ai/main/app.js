@@ -1,4 +1,4 @@
-import { API_CONFIG } from './apis/language_model.js';
+import { API_CONFIG as LANGUAGE_MODEL_API } from './apis/language_model.js';
 import { offloadModel, setProgress, updateUI } from './runner.js';
 
 const startBtn = document.getElementById('start-button');
@@ -7,6 +7,19 @@ const resDownload = document.getElementById('res-download');
 const storyResults = document.getElementById('story-results');
 
 startBtn.disabled = true;
+
+const DEFAULT_API_NAME = 'language_model';
+const API_CONFIGS = Object.freeze([
+  LANGUAGE_MODEL_API,
+]);
+
+function getApiConfig(apiName) {
+  const apiConfig = API_CONFIGS.find(config => config.name === apiName);
+  if (!apiConfig) {
+    throw new Error(`Unknown API name: ${apiName}`);
+  }
+  return apiConfig;
+}
 
 async function runStory(story) {
   console.log(`Running story: ${story.name}`);
@@ -105,18 +118,19 @@ async function downloadModel(apiConfig, initialOptions) {
   const endCreate = performance.now();
   initialSession.destroy();
 
-  await offloadModel();
+  if (apiConfig.needsOffload) {
+    await offloadModel();
+  }
   return endCreate - startCreate;
 }
 
-async function runAITest() {
+async function runAITest(apiConfig) {
   startBtn.disabled = true;
   window.testStatus = 'running';
   resultsPanel.classList.remove('visible');
   storyResults.innerHTML = '';
 
   try {
-    const apiConfig = API_CONFIG;
     if (!apiConfig.isSupported()) {
       throw new Error(
         `${apiConfig.label} API is not available. ` +
@@ -155,7 +169,7 @@ async function runAITest() {
         continue;
       }
 
-      if (!isFirst) {
+      if (!isFirst && apiConfig.needsOffload) {
         await offloadModel();
       }
       isFirst = false;
@@ -199,10 +213,22 @@ async function runAITest() {
 }
 
 function init() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const apiName = urlParams.get('api') || DEFAULT_API_NAME;
+  let apiConfig;
+  try {
+    apiConfig = getApiConfig(apiName);
+  } catch (e) {
+    console.error('Failed to load API configuration:', e);
+    window.testStatus = 'failed';
+    updateUI('failed', 'Failed: ' + e.message, 'ERR', 'Error');
+    return;
+  }
+
   window.testStatus = 'waiting';
   updateUI('waiting', 'Ready', '--', 'Ready');
   startBtn.disabled = false;
-  startBtn.addEventListener('click', runAITest);
+  startBtn.addEventListener('click', () => runAITest(apiConfig));
 }
 
 if (document.readyState === 'complete') {
