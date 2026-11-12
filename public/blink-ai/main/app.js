@@ -1,3 +1,4 @@
+import { API_CONFIG as DECISION_MODEL_API } from './apis/decision_model.js';
 import { API_CONFIG as LANGUAGE_MODEL_API } from './apis/language_model.js';
 import { offloadModel, setProgress, updateUI } from './runner.js';
 
@@ -11,6 +12,7 @@ startBtn.disabled = true;
 const DEFAULT_API_NAME = 'language_model';
 const API_CONFIGS = Object.freeze([
   LANGUAGE_MODEL_API,
+  DECISION_MODEL_API,
 ]);
 
 function getApiConfig(apiName) {
@@ -32,39 +34,6 @@ async function runStory(story) {
     console.error(`Error in runStory for ${story.name}:`, e);
     throw e;
   }
-}
-
-function average(arr) {
-  if (!arr || arr.length === 0) return 0;
-  return arr.reduce((a, b) => a + b, 0) / arr.length;
-}
-
-function createStoryCard(story, storyMetrics) {
-  const template = document.getElementById('story-card-template');
-  const card = template.content.cloneNode(true);
-  const avgWarmTtft = average(storyMetrics.warmTimeToFirstTokenMs);
-  const avgWarmTotal = average(storyMetrics.warmTotalPromptTimeMs);
-  const avgWarmTps = average(storyMetrics.warmTokensPerSecond);
-
-  card.querySelector('.story-name').textContent = story.name;
-  card.querySelector('.story-badge').textContent =
-    `${avgWarmTps.toFixed(2)} t/sec`;
-  card.querySelector('.metric-session').textContent =
-    `${Math.round(storyMetrics.sessionCreationTimeMs)} ms`;
-  card.querySelector('.metric-ttft-cold').textContent =
-    `${Math.round(storyMetrics.coldTimeToFirstTokenMs)} ms`;
-  card.querySelector('.metric-ttft-warm').textContent =
-    `${Math.round(avgWarmTtft)} ms`;
-  card.querySelector('.metric-total-cold').textContent =
-    `${Math.round(storyMetrics.coldTotalPromptTimeMs)} ms`;
-  card.querySelector('.metric-total-warm').textContent =
-    `${Math.round(avgWarmTotal)} ms`;
-  card.querySelector('.metric-tps-warm').textContent =
-    `${avgWarmTps.toFixed(2)} t/sec`;
-  card.querySelector('.metric-sampling-mode').textContent =
-    story.createOptions?.samplingMode ?? 'default';
-
-  return { card, avgWarmTps };
 }
 
 function flattenResults(results) {
@@ -189,19 +158,15 @@ async function runAITest(apiConfig) {
       Math.round(downloadTimeMs) + ' ms' :
       'Cached (0 ms)';
 
-    let totalWarmTps = 0;
     for (const [storyKey, storyMetrics] of Object.entries(results)) {
-      const story = storiesMap[storyKey];
-      const { card, avgWarmTps } = createStoryCard(story, storyMetrics);
-      storyResults.appendChild(card);
-      totalWarmTps += avgWarmTps;
+      storyResults.appendChild(
+        apiConfig.createStoryCard(storiesMap[storyKey], storyMetrics));
     }
 
     resultsPanel.classList.add('visible');
 
-    const overallAvgTps = totalWarmTps / Object.keys(results).length;
-    updateUI(
-      'success', 'Benchmark Completed!', overallAvgTps.toFixed(2), 't/sec');
+    const { value, label } = apiConfig.summarize(results);
+    updateUI('success', 'Benchmark Completed!', value, label);
     return window.metrics;
 
   } catch (e) {
@@ -225,6 +190,8 @@ function init() {
     return;
   }
 
+  document.getElementById('subtitle').textContent =
+    `${apiConfig.label} E2E Performance`;
   window.testStatus = 'waiting';
   updateUI('waiting', 'Ready', '--', 'Ready');
   startBtn.disabled = false;

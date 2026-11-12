@@ -1,4 +1,4 @@
-import { measureStreamingRun, runColdAndWarm } from '../runner.js';
+import { average, measureStreamingRun, runColdAndWarm } from '../runner.js';
 
 const EMOJI_PROMPT =
   `You are a Strict Analyst system. Your sole function is to execute sentiment analysis on product reviews with clinical precision. You must categorize the sentiment into exactly one of these five emoji markers: 😍 (Perfect), 🙂 (Very Good), 😐 (Good), 🙁 (Bad), or 😠 (Terrible).
@@ -344,6 +344,42 @@ function createLanguageModelStory(storyDef) {
   });
 }
 
+function createStoryCard(story, storyMetrics) {
+  const template =
+    document.getElementById('language-model-story-card-template');
+  const card = template.content.cloneNode(true);
+  const avgWarmTtft = average(storyMetrics.warmTimeToFirstTokenMs);
+  const avgWarmTotal = average(storyMetrics.warmTotalPromptTimeMs);
+  const avgWarmTps = average(storyMetrics.warmTokensPerSecond);
+
+  card.querySelector('.story-name').textContent = story.name;
+  card.querySelector('.story-badge').textContent =
+    `${avgWarmTps.toFixed(2)} t/sec`;
+  card.querySelector('.metric-session').textContent =
+    `${Math.round(storyMetrics.sessionCreationTimeMs)} ms`;
+  card.querySelector('.metric-ttft-cold').textContent =
+    `${Math.round(storyMetrics.coldTimeToFirstTokenMs)} ms`;
+  card.querySelector('.metric-ttft-warm').textContent =
+    `${Math.round(avgWarmTtft)} ms`;
+  card.querySelector('.metric-total-cold').textContent =
+    `${Math.round(storyMetrics.coldTotalPromptTimeMs)} ms`;
+  card.querySelector('.metric-total-warm').textContent =
+    `${Math.round(avgWarmTotal)} ms`;
+  card.querySelector('.metric-tps-warm').textContent =
+    `${avgWarmTps.toFixed(2)} t/sec`;
+  card.querySelector('.metric-sampling-mode').textContent =
+    story.createOptions?.samplingMode ?? 'default';
+
+  return card;
+}
+
+// The gauge shows warm tokens per second, averaged over stories.
+function summarize(results) {
+  const storyTps = Object.values(results).map(
+    storyMetrics => average(storyMetrics.warmTokensPerSecond));
+  return { value: average(storyTps).toFixed(2), label: 't/sec' };
+}
+
 export const API_CONFIG = Object.freeze({
   name: 'language_model',
   label: 'LanguageModel',
@@ -357,4 +393,6 @@ export const API_CONFIG = Object.freeze({
   isSupported: () => typeof LanguageModel !== 'undefined',
   availability: (options) => LanguageModel.availability(options),
   createSession: (options) => LanguageModel.create(options),
+  createStoryCard,
+  summarize,
 });

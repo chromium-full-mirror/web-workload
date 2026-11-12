@@ -26,6 +26,11 @@ export function updateUI(state, message, val, label) {
   }
 }
 
+export function average(arr) {
+  if (!arr || arr.length === 0) return 0;
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
 export async function measureStreamingRun(startStream) {
   const startTime = performance.now();
   const stream = startStream();

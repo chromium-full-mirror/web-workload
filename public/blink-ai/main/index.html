@@ -10,7 +10,7 @@
   <div class="container">
     <div class="card">
       <h1>Blink AI Benchmark</h1>
-      <div class="subtitle">Prompt API E2E Performance</div>
+      <div class="subtitle" id="subtitle">Built-in AI E2E Performance</div>
 
       <div class="gauge-container">
         <svg class="gauge-svg" width="220" height="220" viewBox="0 0 220 220">
@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <template id="story-card-template">
+  <template id="language-model-story-card-template">
     <div class="story-card">
       <div class="story-header">
         <span class="story-name"></span>
@@ -73,6 +73,67 @@
         <div class="result-row">
           <span class="result-label">Sampling / MTP Mode</span>
           <span class="result-value metric-sampling-mode"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Each row shows the story metric named by data-metric; rows for metrics
+       a story doesn't record are removed. -->
+  <template id="decision-model-story-card-template">
+    <div class="story-card">
+      <div class="story-header">
+        <span class="story-name"></span>
+        <span class="story-badge"></span>
+      </div>
+      <div class="story-metrics">
+        <div class="result-row" data-metric="sessionCreationTimeMs">
+          <span class="result-label">Session Creation</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="warmSessionCreationTimeMs">
+          <span class="result-label">Session Creation (Warm)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="coldDecideMs">
+          <span class="result-label">Decide (Cold)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="warmDecideMs">
+          <span class="result-label">Decide (Warm Avg)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="fullDraftDecideMs">
+          <span class="result-label">Decide (Full Draft)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="finalResultLatencyMs">
+          <span class="result-label">Result After Keystroke Burst</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="decideAfterAbortMs">
+          <span class="result-label">Decide After Abort (Avg)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="sequentialTotalMs">
+          <span class="result-label">All Items (Sequential)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="concurrentTotalMs">
+          <span class="result-label">All Items (Promise.all)</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="accuracy">
+          <span class="result-label">Accuracy</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="meanConfidence">
+          <span class="result-label">Mean Confidence</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="rankingPairAccuracy">
+          <span class="result-label">Ranking Pair Accuracy</span>
+          <span class="result-value"></span>
         </div>
       </div>
     </div>
