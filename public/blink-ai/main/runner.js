@@ -100,7 +100,7 @@ export async function runColdAndWarm({
   let coldResult;
   try {
     updateUI('running', 'Executing cold prompt...', '--', 'Running');
-    coldResult = await runIteration(session);
+    coldResult = await runIteration(session, /* isCold= */ true);
     console.log(
       `[Cold Run Output for ${storyName}]: ${coldResult.responseText}`);
   } finally {
@@ -114,7 +114,7 @@ export async function runColdAndWarm({
       'Running');
     const warmSession = await createSession();
     try {
-      const warmRes = await runIteration(warmSession);
+      const warmRes = await runIteration(warmSession, /* isCold= */ false);
       warmResults.push(warmRes);
       console.log(
         `[Warm Run ${i + 1} Output for ${storyName}]: ` +

@@ -235,6 +235,65 @@ const STORIES = Object.freeze({
       ],
     }],
   }),
+  'multimodal_multiturn': createLanguageModelStory({
+    name: 'Multimodal (Multi-Turn History)',
+    createOptions: IMAGE_INPUTS,
+    getTurns: () => [
+      [{
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            value: 'Identify the item in this image in one short sentence.',
+          },
+          {
+            type: 'image',
+            value: document.getElementById('input-image-apple'),
+          },
+        ],
+      }],
+      [{
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            value: 'Now identify this second image in one short sentence.',
+          },
+          {
+            type: 'image',
+            value: document.getElementById('input-image-orange'),
+          },
+        ],
+      }],
+      [{
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            value: 'Now identify this third image in one short sentence.',
+          },
+          {
+            type: 'image',
+            value: document.getElementById('input-image-cat'),
+          },
+        ],
+      }],
+      [{
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            value: 'Now identify this fourth image in one short sentence.',
+          },
+          {
+            type: 'image',
+            value: document.getElementById('input-image-strawberry'),
+          },
+        ],
+      }],
+      'List all four items from the previous turns and say which one is an animal.',
+    ],
+  }),
 });
 
 let cachedAudioBuffer;
@@ -278,7 +337,9 @@ async function countChunkTokens(session, chunk) {
 async function runLanguageModelIteration(storyDef, session, promptContent) {
   const promptOptions = storyDef.promptOptions ?? DEFAULT_PROMPT_OPTIONS;
   const initialUsage = session.contextUsage;
+  const measureStart = performance.now();
   const inputTokens = await session.measureContextUsage(promptContent);
+  const measureContextUsageTimeMs = performance.now() - measureStart;
   const streamRes = await measureStreamingRun(
     () => session.promptStreaming(promptContent, promptOptions));
   const tokens = promptOptions.responseConstraint ?
@@ -299,16 +360,56 @@ async function runLanguageModelIteration(storyDef, session, promptContent) {
     await countChunkTokens(session, streamRes.firstChunk);
   // Exclude the first chunk's tokens to measure decode rate after the first
   // chunk arrives.
+  const decodeTokens = Math.max(0, tokens - firstChunkTokens);
   const tokensPerSecond = streamRes.durationSec > 0 ?
-    Math.max(0, tokens - firstChunkTokens) / streamRes.durationSec :
+    decodeTokens / streamRes.durationSec :
     0;
 
   return {
+    measureContextUsageTimeMs,
     timeToFirstTokenMs: streamRes.timeToFirstTokenMs,
     totalTimeMs: streamRes.totalTimeMs,
+    decodeTokens,
+    decodeDurationSec: streamRes.durationSec,
+    chunkCount: streamRes.chunkCount,
     tokensPerSecond,
     acceptanceRate,
     responseText: streamRes.responseText,
+  };
+}
+
+async function runLanguageModelTurns(storyDef, session, turns) {
+  const turnResults = [];
+  for (const turnPrompt of turns) {
+    turnResults.push(
+      await runLanguageModelIteration(storyDef, session, turnPrompt));
+  }
+  const totalDecodeTokens = turnResults.reduce(
+    (sum, r) => sum + r.decodeTokens, 0);
+  const totalDecodeDurationSec = turnResults.reduce(
+    (sum, r) => sum + r.decodeDurationSec, 0);
+  const tokensPerSecond = totalDecodeDurationSec > 0 ?
+    totalDecodeTokens / totalDecodeDurationSec :
+    0;
+  // Weight turn acceptance rate by (chunkCount - 0.5) to match the per-turn
+  // expected-value denominator.
+  const totalAcceptanceWeight = turnResults.reduce(
+    (sum, r) => sum + Math.max(0, r.chunkCount - 0.5), 0);
+  const acceptanceRate = totalAcceptanceWeight > 0 ?
+    turnResults.reduce(
+      (sum, r) => sum + r.acceptanceRate * Math.max(0, r.chunkCount - 0.5),
+      0) / totalAcceptanceWeight :
+    0;
+
+  return {
+    measureContextUsageTimeMs:
+      average(turnResults.map(r => r.measureContextUsageTimeMs)),
+    timeToFirstTokenMs: average(turnResults.map(r => r.timeToFirstTokenMs)),
+    totalTimeMs: average(turnResults.map(r => r.totalTimeMs)),
+    tokensPerSecond,
+    acceptanceRate,
+    responseText: turnResults.map(r => r.responseText).join('\n'),
+    turnResults,
   };
 }
 
@@ -317,24 +418,49 @@ function createLanguageModelStory(storyDef) {
     name: storyDef.name,
     createOptions: storyDef.createOptions,
     run: async () => {
-      const promptContent = await storyDef.getPrompt();
+      const turns = storyDef.getTurns ? await storyDef.getTurns() : null;
+      const promptContent = turns ? null : await storyDef.getPrompt();
       const { sessionCreationTimeMs, coldResult, warmResults } =
         await runColdAndWarm({
           storyName: storyDef.name,
           createSession: () => LanguageModel.create(storyDef.createOptions),
-          runIteration: (session) =>
-            runLanguageModelIteration(storyDef, session, promptContent),
+          runIteration: (session, isCold) => {
+            if (turns) {
+              // Only Turn 1 executes with cold model weights, so run Turn 1
+              // alone on the cold session rather than diluting cold* metrics
+              // with warm turns 2-5 or text-only Turn 5.
+              return isCold ?
+                runLanguageModelIteration(storyDef, session, turns[0]) :
+                runLanguageModelTurns(storyDef, session, turns);
+            }
+            return runLanguageModelIteration(storyDef, session, promptContent);
+          },
         });
 
       const metrics = {
         sessionCreationTimeMs,
+        coldMeasureContextUsageTimeMs: coldResult.measureContextUsageTimeMs,
         coldTimeToFirstTokenMs: coldResult.timeToFirstTokenMs,
         coldTotalPromptTimeMs: coldResult.totalTimeMs,
         coldTokensPerSecond: coldResult.tokensPerSecond,
+        warmMeasureContextUsageTimeMs:
+          warmResults.map(r => r.measureContextUsageTimeMs),
         warmTimeToFirstTokenMs: warmResults.map(r => r.timeToFirstTokenMs),
         warmTotalPromptTimeMs: warmResults.map(r => r.totalTimeMs),
         warmTokensPerSecond: warmResults.map(r => r.tokensPerSecond),
       };
+      if (turns) {
+        turns.forEach((_, turnIdx) => {
+          const turnNum = turnIdx + 1;
+          metrics[`warmTurn${turnNum}MeasureContextUsageTimeMs`] =
+            warmResults.map(
+              r => r.turnResults[turnIdx].measureContextUsageTimeMs);
+          metrics[`warmTurn${turnNum}TimeToFirstTokenMs`] =
+            warmResults.map(r => r.turnResults[turnIdx].timeToFirstTokenMs);
+          metrics[`warmTurn${turnNum}TotalPromptTimeMs`] =
+            warmResults.map(r => r.turnResults[turnIdx].totalTimeMs);
+        });
+      }
       if (storyDef.recordAcceptanceRate) {
         metrics.coldAcceptanceRate = coldResult.acceptanceRate;
         metrics.warmAcceptanceRate = warmResults.map(r => r.acceptanceRate);
