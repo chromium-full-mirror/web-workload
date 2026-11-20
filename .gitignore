@@ -77,3 +77,7 @@ public/speedometer/v*
 public/speedometer/main*
 public/web-tests/main*
 public/webai-compute-benchmark/main*
+
+# Python bytecode
+__pycache__/
+*.py[cod]

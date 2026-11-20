@@ -1,0 +1,11 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+"VizWiz Grand Challenge: Answering Visual Questions from Blind People" by
+Danna Gurari, Qing Li, Abigale J. Stangl, Anhong Guo, Chi Lin, Kristen
+Grauman, Jiebo Luo, and Jeffrey P. Bigham.
+  https://vizwiz.org/tasks-and-datasets/vqa/
+
+Modifications: a 100-example seeded subset of the answerable questions in the
+validation split, reformatted as JSONL, with images re-encoded as JPEG with
+the longest side capped at 1024px.

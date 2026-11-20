@@ -1,0 +1,11 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+"Librispeech: An ASR Corpus Based on Public Domain Audio Books" by Vassil
+Panayotov, Guoguo Chen, Daniel Povey, and Sanjeev Khudanpur.
+  https://www.openslr.org/12/
+  https://huggingface.co/datasets/openslr/librispeech_asr
+
+Modifications: a 100-clip seeded subset of the test-clean split (each clip at
+most 20 seconds long), with audio converted to 16kHz mono FLAC and metadata
+reformatted as JSONL.
