@@ -139,6 +139,39 @@
     </div>
   </template>
 
+  <!-- Quality stories (apis/language_model_quality.js). Rows for metrics a
+       story doesn't record are removed. -->
+  <template id="quality-story-card-template">
+    <div class="story-card">
+      <div class="story-header">
+        <span class="story-name"></span>
+        <span class="story-badge"></span>
+      </div>
+      <div class="story-metrics">
+        <div class="result-row" data-metric="accuracyScore" data-format="percent">
+          <span class="result-label">Accuracy</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="wordErrorRate" data-format="percent">
+          <span class="result-label">Word Error Rate</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="numErrors">
+          <span class="result-label">Prompt Errors</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="numUnparsed">
+          <span class="result-label">Unparsed Answers</span>
+          <span class="result-value"></span>
+        </div>
+        <div class="result-row" data-metric="meanPromptTimeMs" data-format="ms">
+          <span class="result-label">Prompt Time (Mean)</span>
+          <span class="result-value"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
   <div style="display: none;">
     <img id="input-image-apple" src="../media/apple.jpg">
     <img id="input-image-orange" src="../media/orange.jpg">

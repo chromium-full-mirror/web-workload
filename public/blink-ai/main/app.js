@@ -1,5 +1,7 @@
 import { API_CONFIG as DECISION_MODEL_API } from './apis/decision_model.js';
 import { API_CONFIG as LANGUAGE_MODEL_API } from './apis/language_model.js';
+import { API_CONFIG as LANGUAGE_MODEL_QUALITY_API }
+  from './apis/language_model_quality.js';
 import { offloadModel, setProgress, updateUI } from './runner.js';
 
 const startBtn = document.getElementById('start-button');
@@ -12,6 +14,7 @@ startBtn.disabled = true;
 const DEFAULT_API_NAME = 'language_model';
 const API_CONFIGS = Object.freeze([
   LANGUAGE_MODEL_API,
+  LANGUAGE_MODEL_QUALITY_API,
   DECISION_MODEL_API,
 ]);
 
